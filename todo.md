@@ -107,3 +107,7 @@
 
 - [x] **Logo**: Criar logo apenas com texto "DVH RECORDS" sem quadrado/caixa/fundo
 - [x] **Background Hero**: Trocar para imagem de mixer de DJ (console/controladora) ao invés de instrumentos musicais
+
+## 🖼️ Correção da Imagem de Fundo Hero
+
+- [x] **Background Hero**: Trocar para imagem de multidão em show/festival de música eletrônica (como no exemplo fornecido) ao invés de mixer de DJ

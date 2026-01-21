@@ -22,12 +22,12 @@ export default function Hero() {
       id="home"
       className="relative h-screen w-full flex items-center justify-center overflow-hidden"
     >
-      {/* Background: Mixer de DJ com overlay */}
+      {/* Background: Multidão em show/festival de música eletrônica */}
       <div className="absolute inset-0">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80)',
           }}
         />
         {/* Overlay escuro */}
