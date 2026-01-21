@@ -168,3 +168,9 @@
 - [ ] **Traduções PT/EN/ES**: Aplicar em todos os componentes
 - [ ] **Seletor de idioma**: Adicionar no menu/header
 - [ ] **Persistência**: Salvar idioma selecionado no localStorage
+
+## 🔧 Simplificar Player
+
+- [x] **Player minimalista**: Simplificar WinampPlayer para design mais clean
+- [x] **Fixo no rodapé**: Posicionar acima do Footer (como estava antes)
+- [x] **Integração**: Conectar com seleção de artista e tracks

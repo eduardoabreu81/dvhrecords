@@ -7,10 +7,13 @@ import About from "@/components/About";
 
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
+import SimplePlayer from "@/components/SimplePlayer";
 import { mockArtists, type Artist, type Track } from '@/data/artists';
 
 export default function Home() {
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
   const { scrollYProgress } = useScroll();
 
   // Parallax effects para diferentes seções
@@ -23,9 +26,26 @@ export default function Home() {
     setSelectedArtist(artist);
   };
 
-  const handleTrackChange = (track: Track, isPlaying: boolean) => {
-    console.log('Track changed:', track.title, 'Playing:', isPlaying);
-    // Aqui você pode integrar com AudioPlayer se necessário
+  const handleTrackChange = (track: Track, playing: boolean) => {
+    setCurrentTrack(track);
+    setIsPlaying(playing);
+  };
+
+  const handlePlay = () => setIsPlaying(true);
+  const handlePause = () => setIsPlaying(false);
+  const handleNext = () => {
+    if (!selectedArtist || !currentTrack) return;
+    const currentIndex = selectedArtist.tracks.findIndex(t => t.title === currentTrack.title);
+    const nextIndex = (currentIndex + 1) % selectedArtist.tracks.length;
+    setCurrentTrack(selectedArtist.tracks[nextIndex]);
+    setIsPlaying(true);
+  };
+  const handlePrevious = () => {
+    if (!selectedArtist || !currentTrack) return;
+    const currentIndex = selectedArtist.tracks.findIndex(t => t.title === currentTrack.title);
+    const prevIndex = currentIndex === 0 ? selectedArtist.tracks.length - 1 : currentIndex - 1;
+    setCurrentTrack(selectedArtist.tracks[prevIndex]);
+    setIsPlaying(true);
   };
 
   return (
@@ -82,6 +102,17 @@ export default function Home() {
           <Submit />
         </motion.div>
       </section>
+
+      {/* Simple Player */}
+      <SimplePlayer
+        artist={selectedArtist}
+        currentTrack={currentTrack}
+        isPlaying={isPlaying}
+        onPlay={handlePlay}
+        onPause={handlePause}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
+      />
 
       {/* Footer estático */}
       <Footer />
