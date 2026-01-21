@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Hero from "@/components/Hero";
-import ArtistsBar from "@/components/ArtistsBar";
+import ArtistsSidebar from "@/components/ArtistsSidebar";
 import TurntableNew from "@/components/TurntableNew";
+import Releases from "@/components/Releases";
 import About from "@/components/About";
-
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
 import SimplePlayer from "@/components/SimplePlayer";
@@ -18,7 +18,7 @@ export default function Home() {
 
   // Parallax effects para diferentes seções
   const heroY = useTransform(scrollYProgress, [0, 0.2], [0, -50]);
-  const turntableY = useTransform(scrollYProgress, [0.2, 0.5], [50, -50]);
+  const artistsY = useTransform(scrollYProgress, [0.2, 0.5], [50, -50]);
   const aboutY = useTransform(scrollYProgress, [0.5, 0.7], [50, -30]);
   const submitY = useTransform(scrollYProgress, [0.7, 0.9], [30, -20]);
 
@@ -57,20 +57,19 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Barra de Artistas (scroll horizontal) */}
+      {/* Artists Section com Sidebar + Bio + Releases */}
       <section className="snap-start min-h-screen flex flex-col">
-        <ArtistsBar 
-        artists={mockArtists}
-        selectedArtist={selectedArtist}
-        onSelectArtist={handleSelectArtist}
-      />
+        <ArtistsSidebar
+          artists={mockArtists}
+          selectedArtist={selectedArtist}
+          onSelectArtist={handleSelectArtist}
+        />
 
-        {/* Toca-discos + Bio do Artista */}
         <div 
           id="artists" 
-          className="relative flex-1 flex items-center bg-background/50"
+          className="relative flex-1 flex items-center bg-background/50 lg:pl-64"
           style={{
-            backgroundImage: 'url(/images/turntable/technics-turntable.png)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat'
@@ -78,12 +77,23 @@ export default function Home() {
         >
           {/* Overlay escuro para melhor legibilidade */}
           <div className="absolute inset-0 bg-black/70" />
+          
           <div className="container relative z-10">
-            <motion.div style={{ y: turntableY }}>
-              <TurntableNew 
-                artist={selectedArtist}
-                onTrackChange={handleTrackChange}
-              />
+            <motion.div style={{ y: artistsY }}>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Bio e Tracks (2 colunas) */}
+                <div className="lg:col-span-2">
+                  <TurntableNew 
+                    artist={selectedArtist}
+                    onTrackChange={handleTrackChange}
+                  />
+                </div>
+
+                {/* Releases (1 coluna) */}
+                <div className="lg:col-span-1">
+                  <Releases />
+                </div>
+              </div>
             </motion.div>
           </div>
         </div>

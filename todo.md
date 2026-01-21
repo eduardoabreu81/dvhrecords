@@ -174,3 +174,11 @@
 - [x] **Player minimalista**: Simplificar WinampPlayer para design mais clean
 - [x] **Fixo no rodapé**: Posicionar acima do Footer (como estava antes)
 - [x] **Integração**: Conectar com seleção de artista e tracks
+
+## 🔧 Correções de Layout e Bugs
+
+- [x] **Remover toca-discos visual**: Tirar imagem do toca-discos e disco girando da seção Artists
+- [x] **Artistas na lateral esquerda**: Mover lista de artistas para sidebar esquerda (desktop) com scroll invisível
+- [x] **Artistas no topo (mobile)**: Manter no topo para telas pequenas
+- [x] **Releases à direita**: Adicionar seção de releases com links Spotify/Apple Music
+- [x] **Corrigir player pause**: Música deve parar de tocar quando clicar em Pause (bug atual: continua tocando)

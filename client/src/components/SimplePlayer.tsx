@@ -44,10 +44,14 @@ export default function SimplePlayer({
         });
       }, 1000);
       return () => clearInterval(interval);
-    } else {
-      setCurrentTime(0);
     }
+    // Não resetar currentTime quando pausar, apenas parar o intervalo
   }, [isPlaying, currentTrack, onNext]);
+
+  // Resetar currentTime quando trocar de track
+  useEffect(() => {
+    setCurrentTime(0);
+  }, [currentTrack]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
