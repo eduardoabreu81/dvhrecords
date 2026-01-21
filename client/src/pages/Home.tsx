@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import ArtistsSidebar from "@/components/ArtistsSidebar";
 import TurntableNew from "@/components/TurntableNew";
@@ -49,7 +50,11 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen snap-y snap-mandatory overflow-y-scroll h-screen pb-20">
+    <>
+      {/* Header fixo global (aparece em todas as seções) */}
+      <Header />
+      
+      <div className="min-h-screen snap-y snap-mandatory overflow-y-scroll h-screen pb-20">
       {/* Hero com parallax */}
       <section className="snap-start h-screen">
         <motion.div style={{ y: heroY }}>
@@ -57,8 +62,16 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Artists Section com Sidebar + Bio + Releases */}
-      <section className="snap-start min-h-screen flex flex-col">
+      {/* Latest Releases - Metade da Home */}
+      <section className="snap-start h-screen flex items-center bg-background">
+        <div className="container">
+          <Releases />
+        </div>
+      </section>
+
+      {/* Artists Section com Sidebar + Bio */}
+      <section className="snap-start min-h-screen flex flex-col relative">
+        {/* Sidebar apenas nesta seção */}
         <ArtistsSidebar
           artists={mockArtists}
           selectedArtist={selectedArtist}
@@ -67,7 +80,7 @@ export default function Home() {
 
         <div 
           id="artists" 
-          className="relative flex-1 flex items-center bg-background/50 lg:pl-64"
+          className="relative flex-1 flex items-center bg-background/50 lg:pl-72"
           style={{
             backgroundImage: 'url(https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920)',
             backgroundSize: 'cover',
@@ -80,20 +93,10 @@ export default function Home() {
           
           <div className="container relative z-10">
             <motion.div style={{ y: artistsY }}>
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Bio e Tracks (2 colunas) */}
-                <div className="lg:col-span-2">
-                  <TurntableNew 
-                    artist={selectedArtist}
-                    onTrackChange={handleTrackChange}
-                  />
-                </div>
-
-                {/* Releases (1 coluna) */}
-                <div className="lg:col-span-1">
-                  <Releases />
-                </div>
-              </div>
+              <TurntableNew 
+                artist={selectedArtist}
+                onTrackChange={handleTrackChange}
+              />
             </motion.div>
           </div>
         </div>
@@ -126,6 +129,7 @@ export default function Home() {
 
       {/* Footer estático */}
       <Footer />
-    </div>
+      </div>
+    </>
   );
 }

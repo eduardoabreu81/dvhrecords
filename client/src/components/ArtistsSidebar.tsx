@@ -15,40 +15,35 @@ export default function ArtistsSidebar({
   return (
     <>
       {/* Desktop: Sidebar esquerda */}
-      <div className="hidden lg:block fixed left-0 top-20 bottom-20 w-64 overflow-y-auto scrollbar-hide z-30">
-        <div className="p-4 space-y-2">
-          <h3 className="text-sm font-display text-primary glow-cyan mb-4 px-2">
+      <div className="hidden lg:block fixed left-0 top-20 bottom-20 w-72 overflow-y-auto scrollbar-hide z-30 bg-background/30 backdrop-blur-sm border-r border-border">
+        <div className="p-6 space-y-4">
+          <h3 className="text-lg font-display text-primary glow-cyan mb-6">
             ARTISTS
           </h3>
           {artists.map((artist) => (
             <motion.button
               key={artist.id}
-              whileHover={{ scale: 1.05, x: 5 }}
+              whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => onSelectArtist(artist)}
-              className={`w-full flex items-center gap-3 p-2 rounded-lg transition-all ${
+              className={`w-full flex flex-col items-center gap-2 p-3 rounded-lg transition-all ${
                 selectedArtist?.id === artist.id
-                  ? 'bg-primary/20 border border-primary'
-                  : 'bg-card/30 border border-border hover:border-primary/50'
+                  ? 'bg-primary/20 border-2 border-primary'
+                  : 'bg-card/30 border-2 border-transparent hover:border-primary/50'
               }`}
             >
               <img
                 src={artist.image}
                 alt={artist.name}
-                className="w-12 h-12 rounded object-cover"
+                className="w-32 h-32 rounded object-cover"
               />
-              <div className="flex-1 text-left">
-                <p className={`text-sm font-medium truncate ${
-                  selectedArtist?.id === artist.id
-                    ? 'text-primary glow-cyan'
-                    : 'text-foreground'
-                }`}>
-                  {artist.name}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {artist.genre}
-                </p>
-              </div>
+              <p className={`text-sm font-medium text-center ${
+                selectedArtist?.id === artist.id
+                  ? 'text-primary glow-cyan'
+                  : 'text-foreground'
+              }`}>
+                {artist.name}
+              </p>
             </motion.button>
           ))}
         </div>

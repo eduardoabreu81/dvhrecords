@@ -182,3 +182,11 @@
 - [x] **Artistas no topo (mobile)**: Manter no topo para telas pequenas
 - [x] **Releases à direita**: Adicionar seção de releases com links Spotify/Apple Music
 - [x] **Corrigir player pause**: Música deve parar de tocar quando clicar em Pause (bug atual: continua tocando)
+
+## 🔧 Novas Correções
+
+- [x] **Sidebar de artistas**: Deve aparecer APENAS na seção Artists, não em todas as páginas
+- [x] **Imagens dos artistas**: Quadradas grandes e visíveis, com nome embaixo
+- [x] **Latest Releases na Home**: Ocupar metade da página Home (desktop) com layout de quadrado grande + dados
+- [x] **Latest Releases**: Aparecer APENAS na página Home, não na seção Artists
+- [x] **Header fixo**: Deve aparecer em todas as seções (Hero, Artists, About, Submit)
