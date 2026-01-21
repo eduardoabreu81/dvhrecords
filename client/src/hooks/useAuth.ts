@@ -1,30 +1,63 @@
-import { trpc } from '@/lib/trpc';
+import { useState, useEffect } from 'react';
+import { 
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  type User
+} from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
-/**
- * Hook para autenticação usando Manus OAuth via tRPC
- * 
- * Este projeto usa Manus OAuth integrado, não Firebase.
- * A autenticação é gerenciada automaticamente via cookies de sessão.
- */
 export function useAuth() {
-  const { data: user, isLoading: loading, error } = trpc.auth.me.useQuery();
-  const logoutMutation = trpc.auth.logout.useMutation();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!auth) {
+      setLoading(false);
+      return;
+    }
+
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    if (!auth) {
+      setError('Firebase not initialized');
+      return false;
+    }
+
+    try {
+      setError(null);
+      await signInWithEmailAndPassword(auth, email, password);
+      return true;
+    } catch (err: any) {
+      setError(err.message || 'Login failed');
+      return false;
+    }
+  };
 
   const logout = async () => {
+    if (!auth) return;
+    
     try {
-      await logoutMutation.mutateAsync();
-      // Recarregar página para limpar estado
-      window.location.href = '/';
+      await signOut(auth);
     } catch (err: any) {
-      console.error('Logout failed:', err);
+      setError(err.message || 'Logout failed');
     }
   };
 
   return {
-    user: user || null,
+    user,
     loading,
-    error: error?.message || null,
+    error,
     isAuthenticated: !!user,
+    login,
     logout,
   };
 }

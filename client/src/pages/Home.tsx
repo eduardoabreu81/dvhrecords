@@ -7,7 +7,7 @@ import ArtistModal from "@/components/ArtistModal";
 import About from "@/components/About";
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
-
+import SimplePlayer from "@/components/SimplePlayer";
 import { mockArtists, type Artist, type Track } from '@/data/artists';
 
 export default function Home() {
@@ -104,6 +104,17 @@ export default function Home() {
           <Submit />
         </motion.div>
       </section>
+
+      {/* Simple Player */}
+      <SimplePlayer
+        artist={selectedArtist}
+        currentTrack={currentTrack}
+        isPlaying={isPlaying}
+        onPlay={handlePlay}
+        onPause={handlePause}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
+      />
 
       {/* Footer estático */}
       <Footer />

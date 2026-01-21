@@ -54,15 +54,12 @@ Site oficial da DVH Records, uma gravadora digital especializada em Drum & Bass,
 - **WaveSurfer.js** - Visualizador de waveform
 
 ### Backend
-- **Express 4** - Server framework
-- **tRPC 11** - Type-safe API
-- **Drizzle ORM** - Database ORM
-- **TiDB** - Banco de dados MySQL-compatible
-- **Manus OAuth** - Autenticação integrada
+- **Firebase Firestore** - Banco de dados
+- **Firebase Storage** - Armazenamento de arquivos
+- **Firebase Authentication** - Sistema de login
 
-### Storage & Deploy
-- **Amazon S3** - Armazenamento de arquivos (pré-configurado)
-- **Manus Hosting** - Hosting integrado com custom domains
+### Deploy
+- **Netlify** - Hospedagem e CI/CD
 - **GitHub** - Controle de versão
 
 ---
@@ -133,25 +130,26 @@ http://localhost:5173
 
 ---
 
-## 🔐 Autenticação
+## 🔥 Configuração Firebase
 
-Este projeto usa **Manus OAuth** integrado (não Firebase). A autenticação é gerenciada automaticamente via cookies de sessão.
-
-- Login: `getLoginUrl()` redireciona para portal OAuth
-- Logout: `trpc.auth.logout.useMutation()`
-- Estado do usuário: `trpc.auth.me.useQuery()`
+Siga as instruções detalhadas no arquivo `FIREBASE_SETUP.md` para:
+1. Criar projeto Firebase
+2. Configurar Firestore
+3. Configurar Storage
+4. Configurar Authentication
+5. Obter credenciais
 
 ---
 
 ## 🌐 Deploy
 
-O projeto usa **Manus Hosting** integrado:
+Siga as instruções detalhadas no arquivo `DEPLOY_NETLIFY.md` para fazer o deploy no Netlify.
 
-1. Criar checkpoint via Manus UI
-2. Clicar em "Publish" na interface
-3. Configurar custom domain nas Settings
-
-**Nota**: Este projeto usa Express + tRPC no backend, portanto requer ambiente Node.js. Não é compatível com Netlify/Vercel static hosting sem adaptações.
+### Resumo Rápido:
+1. Faça push do código para o GitHub
+2. Conecte o repositório no Netlify
+3. Configure as variáveis de ambiente
+4. Deploy automático!
 
 ---
 
@@ -189,12 +187,12 @@ O site é totalmente responsivo e funciona em:
 Acesse o painel administrativo em: `/admin`
 
 **Funcionalidades:**
-- Login com Manus OAuth
+- Login com Firebase Authentication
 - Visualizar todos os artistas
-- Adicionar novos artistas (em desenvolvimento)
-- Editar artistas existentes (em desenvolvimento)
+- Adicionar novos artistas
+- Editar artistas existentes
 - Deletar artistas
-- Upload de imagens e músicas para S3 (em desenvolvimento)
+- Upload de imagens e músicas
 
 ---
 
