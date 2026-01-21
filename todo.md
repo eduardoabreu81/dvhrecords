@@ -220,3 +220,9 @@
 
 - [x] **Erro de Hooks no ArtistModal**: "Rendered more hooks than during the previous render" - ordem inconsistente de Hooks
 - [x] **Firebase API Key inválida**: "Firebase: Error (auth/invalid-api-key)" - configuração precisa ser ajustada
+
+## 🧹 Limpeza de Código
+
+- [x] **Remover Firebase**: Excluir completamente Firebase do projeto (não faz parte da stack)
+- [x] **Documentar stack correta**: TiDB (banco de dados), S3 (storage), Manus Auth (autenticação), tRPC (API)
+- [x] **Esclarecer hosting**: Manus hosting integrado com custom domains (não Netlify por enquanto)
