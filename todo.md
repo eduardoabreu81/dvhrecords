@@ -150,10 +150,11 @@
 
 ## 🎵 Player Estilo Winamp
 
-- [ ] **Imagem do disco**: Exibir capa do artista que está tocando
-- [ ] **Controles**: Play, Pause, Stop, Next, Previous
-- [ ] **Display de info**: Nome da track, artista, duração
-- [ ] **Visualizador de áudio**: Espectro de frequência simples
+- [x] **Imagem do disco**: Exibir capa do artista que está tocando
+- [x] **Controles**: Play, Pause, Stop, Next, Previous
+- [x] **Display de info**: Nome da track, artista, duração
+- [x] **Visualizador de áudio**: Espectro de frequência simples
+- [ ] **Integração no Home.tsx**: Conectar player com TurntableNew
 - [ ] **Integração com Web Audio API**: Reprodução real de arquivos MP3/WAV
 
 ## 🎭 Páginas Dedicadas de Artistas
