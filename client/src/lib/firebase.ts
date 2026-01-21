@@ -1,6 +1,6 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { getFirestore, type Firestore } from 'firebase/firestore';
-import { getStorage, type FirebaseStorage } from 'firebase/storage';
+
 import { getAuth, type Auth } from 'firebase/auth';
 
 // Firebase configuration
@@ -17,16 +17,16 @@ const firebaseConfig = {
 // Initialize Firebase
 let app: FirebaseApp | undefined;
 let db: Firestore | undefined;
-let storage: FirebaseStorage | undefined;
+
 let auth: Auth | undefined;
 
 try {
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
-  storage = getStorage(app);
+
   auth = getAuth(app);
 } catch (error) {
   console.error('Firebase initialization error:', error);
 }
 
-export { app, db, storage, auth };
+export { app, db, auth };

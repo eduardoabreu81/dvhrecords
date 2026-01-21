@@ -10,16 +10,16 @@ import {
   orderBy,
   Timestamp,
 } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
-import { db, storage } from './firebase';
+import { db } from './firebase';
+import { uploadToB2, deleteFromB2 } from './b2Storage';
 import type { Artist } from '@/data/artists';
 
 // Helper to ensure Firebase is initialized
 function ensureFirebaseInitialized() {
-  if (!db || !storage) {
+  if (!db) {
     throw new Error('Firebase not initialized. Please configure Firebase credentials.');
   }
-  return { db, storage };
+  return { db };
 }
 
 // ==================== ARTISTS ====================
@@ -126,18 +126,14 @@ export async function deleteArtist(id: string): Promise<void> {
 // ==================== STORAGE ====================
 
 /**
- * Upload image to Firebase Storage
+ * Upload image to Backblaze B2
  * @param file - File to upload
- * @param path - Storage path (e.g., 'artists/covers/filename.jpg')
+ * @param folder - Folder name (e.g., 'images', 'covers')
  * @returns Download URL
  */
-export async function uploadImage(file: File, path: string): Promise<string> {
+export async function uploadImage(file: File, folder: string = 'images'): Promise<string> {
   try {
-    const { storage: firebaseStorage } = ensureFirebaseInitialized();
-    const storageRef = ref(firebaseStorage, path);
-    await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(storageRef);
-    return downloadURL;
+    return await uploadToB2(file, folder);
   } catch (error) {
     console.error('Error uploading image:', error);
     throw error;
@@ -145,18 +141,14 @@ export async function uploadImage(file: File, path: string): Promise<string> {
 }
 
 /**
- * Upload audio file to Firebase Storage
+ * Upload audio file to Backblaze B2
  * @param file - Audio file to upload
- * @param path - Storage path (e.g., 'artists/tracks/filename.mp3')
+ * @param folder - Folder name (e.g., 'audio', 'tracks')
  * @returns Download URL
  */
-export async function uploadAudio(file: File, path: string): Promise<string> {
+export async function uploadAudio(file: File, folder: string = 'audio'): Promise<string> {
   try {
-    const { storage: firebaseStorage } = ensureFirebaseInitialized();
-    const storageRef = ref(firebaseStorage, path);
-    await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(storageRef);
-    return downloadURL;
+    return await uploadToB2(file, folder);
   } catch (error) {
     console.error('Error uploading audio:', error);
     throw error;
@@ -164,14 +156,12 @@ export async function uploadAudio(file: File, path: string): Promise<string> {
 }
 
 /**
- * Delete file from Firebase Storage
- * @param path - Storage path to delete
+ * Delete file from Backblaze B2
+ * @param fileUrl - Full URL of file to delete
  */
-export async function deleteFile(path: string): Promise<void> {
+export async function deleteFile(fileUrl: string): Promise<void> {
   try {
-    const { storage: firebaseStorage } = ensureFirebaseInitialized();
-    const storageRef = ref(firebaseStorage, path);
-    await deleteObject(storageRef);
+    await deleteFromB2(fileUrl);
   } catch (error) {
     console.error('Error deleting file:', error);
     throw error;
