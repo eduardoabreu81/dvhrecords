@@ -29,7 +29,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen snap-y snap-mandatory overflow-y-scroll h-screen">
+    <div className="min-h-screen snap-y snap-mandatory overflow-y-scroll h-screen pb-20">
       {/* Hero com parallax */}
       <section className="snap-start h-screen">
         <motion.div style={{ y: heroY }}>

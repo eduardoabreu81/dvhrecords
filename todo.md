@@ -143,3 +143,22 @@
 - [x] **Backgrounds temáticos**: Adicionar imagens de fundo para About e Submit
 - [x] **Rodapé estático**: Tornar rodapé fixo na parte inferior (não ocupa seção completa)
 - [x] **Remover duplicações**: Eliminar seção LabelBio duplicada (unificada com About)
+
+## 🔧 Correção Footer
+
+- [x] **Footer fixo**: Tornar Footer sempre visível na parte inferior da tela (fixed position)
+
+## 🎵 Player Estilo Winamp
+
+- [ ] **Interface clássica Winamp**: Design retrô com visual característico
+- [ ] **Playlist completa**: Lista de tracks do artista selecionado
+- [ ] **Controles**: Play, Pause, Stop, Next, Previous
+- [ ] **Equalizer visual**: Visualizador de espectro de frequência
+- [ ] **Display de info**: Nome da track, artista, duração
+- [ ] **Integração com Web Audio API**: Reprodução real de arquivos MP3/WAV
+
+## 🌍 Sistema Multilíngue
+
+- [ ] **Traduções PT/EN/ES**: Aplicar em todos os componentes
+- [ ] **Seletor de idioma**: Adicionar no menu/header
+- [ ] **Persistência**: Salvar idioma selecionado no localStorage
