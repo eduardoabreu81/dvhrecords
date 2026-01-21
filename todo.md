@@ -218,3 +218,9 @@
 - [x] Remover arquivo `client/src/data/artists.ts`
 - [x] Testar Admin Panel com dados reais do Firestore
 - [ ] Deploy no Netlify
+
+## 🔄 Atualizar Releases para Firestore
+
+- [x] Atualizar componente Releases para buscar dados do Firestore ao invés de hardcode
+- [x] Testar Latest Releases na Hero
+- [ ] Deploy no Netlify

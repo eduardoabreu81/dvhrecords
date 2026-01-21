@@ -32,6 +32,7 @@ export interface Release {
   id: string;
   trackId: string;
   artistId: string;
+  artistName?: string; // Enriquecido no hook
   title: string;
   coverUrl: string;
   releaseDate: string;
@@ -91,9 +92,18 @@ export function useFirestoreArtists() {
           tracks: tracksData.filter(track => track.artistId === artist.id)
         })) as Artist[];
         
+        // Enriquecer releases com artistName
+        const enrichedReleases = releasesData.map(release => {
+          const artist = artistsRaw.find((a: any) => a.id === release.artistId) as any;
+          return {
+            ...release,
+            artistName: artist?.name || 'Unknown Artist'
+          };
+        });
+        
         setArtists(artistsData);
         setTracks(tracksData);
-        setReleases(releasesData);
+        setReleases(enrichedReleases);
         setError(null);
       } catch (err) {
         console.error('Error fetching Firestore data:', err);
