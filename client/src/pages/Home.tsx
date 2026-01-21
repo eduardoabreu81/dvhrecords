@@ -112,16 +112,7 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Simple Player */}
-      <SimplePlayer
-        artist={selectedArtist}
-        currentTrack={currentTrack}
-        isPlaying={isPlaying}
-        onPlay={handlePlay}
-        onPause={handlePause}
-        onNext={handleNext}
-        onPrevious={handlePrevious}
-      />
+
 
       {/* Footer estático */}
       <Footer />
@@ -132,6 +123,12 @@ export default function Home() {
         artist={selectedArtist}
         isOpen={!!selectedArtist}
         onClose={() => setSelectedArtist(null)}
+        currentTrack={currentTrack}
+        isPlaying={isPlaying}
+        onPlay={handlePlay}
+        onPause={handlePause}
+        onNext={handleNext}
+        onPrevious={handlePrevious}
         onTrackChange={handleTrackChange}
       />
     </>

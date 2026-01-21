@@ -224,3 +224,8 @@
 - [x] Atualizar componente Releases para buscar dados do Firestore ao invés de hardcode
 - [x] Testar Latest Releases na Hero
 - [ ] Deploy no Netlify
+
+## 🐛 Bug: Player Fora do Modal
+
+- [x] Player está aparecendo na página esmaecida ao invés de dentro do modal de artista
+- [x] Corrigir para player ficar fixo no rodapé do modal

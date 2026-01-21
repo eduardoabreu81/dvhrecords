@@ -3,15 +3,33 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Artist, Track } from '../hooks/useFirestoreArtists';
+import SimplePlayer from './SimplePlayer';
 
 interface ArtistModalProps {
   artist: Artist | null;
   isOpen: boolean;
   onClose: () => void;
-  onTrackChange?: (track: Track, isPlaying: boolean) => void;
+  currentTrack?: Track | null;
+  isPlaying?: boolean;
+  onPlay?: () => void;
+  onPause?: () => void;
+  onNext?: () => void;
+  onPrevious?: () => void;
+  onTrackChange?: (track: Track) => void;
 }
 
-export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: ArtistModalProps) {
+export default function ArtistModal({ 
+  artist, 
+  isOpen, 
+  onClose, 
+  currentTrack,
+  isPlaying = false,
+  onPlay,
+  onPause,
+  onNext,
+  onPrevious,
+  onTrackChange 
+}: ArtistModalProps) {
   const { t } = useTranslation();
 
   // Fechar modal com ESC
@@ -34,7 +52,7 @@ export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: 
 
   const handlePlayTrack = (track: Track) => {
     if (onTrackChange) {
-      onTrackChange(track, true);
+      onTrackChange(track);
     }
   };
 
@@ -129,6 +147,21 @@ export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: 
                   </div>
                 </div>
               </div>
+
+              {/* Player fixo no rodapé do modal */}
+              {currentTrack && (
+                <div className="border-t border-border bg-card/50 backdrop-blur-sm">
+                  <SimplePlayer
+                    artist={artist}
+                    currentTrack={currentTrack}
+                    isPlaying={isPlaying}
+                    onPlay={onPlay || (() => {})}
+                    onPause={onPause || (() => {})}
+                    onNext={onNext || (() => {})}
+                    onPrevious={onPrevious || (() => {})}
+                  />
+                </div>
+              )}
             </motion.div>
           </div>
         </>
