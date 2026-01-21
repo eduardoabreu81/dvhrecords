@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, Square, SkipForward, SkipBack, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import type { Artist, Track } from '@/data/artists';
+import type { Artist, Track } from '@/hooks/useFirestoreArtists';
 
 interface WinampPlayerProps {
   artist: Artist | null;
@@ -36,9 +36,8 @@ export default function WinampPlayer({
   // Simular progresso de tempo
   useEffect(() => {
     if (isPlaying && currentTrack) {
-      // Converter duration string (MM:SS) para segundos
-      const [mins, secs] = currentTrack.duration.split(':').map(Number);
-      const totalSeconds = mins * 60 + secs;
+      // duration já é number (segundos)
+      const totalSeconds = currentTrack.duration || 0;
       setDuration(totalSeconds);
       
       const interval = setInterval(() => {

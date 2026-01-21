@@ -1,25 +1,26 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronUp, ChevronDown, X } from 'lucide-react';
-import { mockArtists, type Artist } from '@/data/artists';
+import { useFirestoreArtists, type Artist } from '@/hooks/useFirestoreArtists';
 
 interface RecordBoxProps {
   onSelectArtist: (artist: Artist) => void;
 }
 
 export default function RecordBox({ onSelectArtist }: RecordBoxProps) {
+  const { artists } = useFirestoreArtists();
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleNext = () => {
-    setCurrentIndex((prev) => (prev + 1) % mockArtists.length);
+    setCurrentIndex((prev) => (prev + 1) % artists.length);
   };
 
   const handlePrev = () => {
-    setCurrentIndex((prev) => (prev - 1 + mockArtists.length) % mockArtists.length);
+    setCurrentIndex((prev) => (prev - 1 + artists.length) % artists.length);
   };
 
-  const currentArtist = mockArtists[currentIndex];
+  const currentArtist = artists[currentIndex];
 
   return (
     <>
@@ -132,7 +133,7 @@ export default function RecordBox({ onSelectArtist }: RecordBoxProps) {
 
                 {/* Counter */}
                 <div className="mt-4 text-primary/70 text-sm font-display">
-                  {currentIndex + 1} / {mockArtists.length}
+                  {currentIndex + 1} / {artists.length}
                 </div>
               </div>
             </motion.div>

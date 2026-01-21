@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Artist, Track } from '../data/artists';
+import { Artist, Track } from '../hooks/useFirestoreArtists';
 
 interface TurntableNewProps {
   artist: Artist | null;

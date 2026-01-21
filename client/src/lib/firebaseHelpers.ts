@@ -12,7 +12,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { uploadToB2, deleteFromB2 } from './b2Storage';
-import type { Artist } from '@/data/artists';
+import type { Artist } from '@/hooks/useFirestoreArtists';
 
 // Helper to ensure Firebase is initialized
 function ensureFirebaseInitialized() {

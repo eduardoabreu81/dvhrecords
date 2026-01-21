@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Music } from 'lucide-react';
-import type { Artist } from '@/data/artists';
+import type { Artist } from '@/hooks/useFirestoreArtists';
 
 interface ArtistProfileProps {
   artist: Artist | null;

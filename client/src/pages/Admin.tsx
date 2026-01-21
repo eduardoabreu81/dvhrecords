@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, LogOut, Loader2 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { getAllArtists, deleteArtist } from '@/lib/firebaseHelpers';
-import type { Artist } from '@/data/artists';
+import type { Artist } from '@/hooks/useFirestoreArtists';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 

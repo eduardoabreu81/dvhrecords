@@ -1,0 +1,28 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Artistas: leitura pública, escrita apenas autenticados
+    match /artists/{artistId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Tracks: leitura pública, escrita apenas autenticados
+    match /tracks/{trackId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Releases: leitura pública, escrita apenas autenticados
+    match /releases/{releaseId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Submissions (demos enviados): leitura/escrita apenas autenticados
+    match /submissions/{submissionId} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

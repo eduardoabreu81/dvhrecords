@@ -8,9 +8,10 @@ import About from "@/components/About";
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
 import SimplePlayer from "@/components/SimplePlayer";
-import { mockArtists, type Artist, type Track } from '@/data/artists';
+import { useFirestoreArtists, type Artist, type Track } from '@/hooks/useFirestoreArtists';
 
 export default function Home() {
+  const { artists, tracks, releases, loading, error } = useFirestoreArtists();
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -82,11 +83,17 @@ export default function Home() {
         <div className="container relative z-10 py-12">
           <motion.div style={{ y: artistsY }}>
             {/* Grid de artistas sempre visível */}
-            <ArtistsGrid 
-              artists={mockArtists}
-              selectedArtist={selectedArtist}
-              onSelectArtist={handleSelectArtist}
-            />
+            {loading ? (
+              <div className="text-center text-primary">Loading artists...</div>
+            ) : error ? (
+              <div className="text-center text-red-500">{error}</div>
+            ) : (
+              <ArtistsGrid 
+                artists={artists}
+                selectedArtist={selectedArtist}
+                onSelectArtist={handleSelectArtist}
+              />
+            )}
           </motion.div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
-import { Artist } from '../data/artists';
+import { Artist } from '../hooks/useFirestoreArtists';
 
 interface ArtistsGridProps {
   artists: Artist[];

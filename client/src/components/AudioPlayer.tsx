@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX, X } from 'lucide-react';
 import WaveSurfer from 'wavesurfer.js';
-import type { Artist } from '@/data/artists';
+import type { Artist } from '@/hooks/useFirestoreArtists';
 
 interface AudioPlayerProps {
   artist: Artist | null;

@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ArtistProfile from './ArtistProfile';
-import type { Artist } from '@/data/artists';
+import type { Artist } from '@/hooks/useFirestoreArtists';
 
 interface TurntableProps {
   onPlayArtist: (artist: Artist) => void;

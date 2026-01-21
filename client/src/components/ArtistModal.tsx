@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { Artist, Track } from '../data/artists';
+import { Artist, Track } from '../hooks/useFirestoreArtists';
 
 interface ArtistModalProps {
   artist: Artist | null;

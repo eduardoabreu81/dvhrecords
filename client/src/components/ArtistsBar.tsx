@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Artist } from '../data/artists';
+import { Artist } from '../hooks/useFirestoreArtists';
 
 interface ArtistsBarProps {
   artists: Artist[];

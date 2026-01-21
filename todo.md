@@ -209,3 +209,12 @@
 - [x] **Modal centralizado**: Transformar visualização de artista em pop-up/modal centralizado ao invés de substituir o grid
 - [x] **Grid visível**: Manter grid de artistas visível com overlay escuro quando modal estiver aberto
 - [x] **Botão fechar**: Adicionar botão X no canto superior direito do modal para fechar
+
+## 🗄️ Migração de Dados para Firestore
+
+- [x] Criar estrutura de coleções no Firestore (artists, tracks, releases)
+- [x] Criar script de migração para copiar dados mock para Firestore
+- [x] Atualizar frontend para buscar artistas do Firestore ao invés de hardcode
+- [x] Remover arquivo `client/src/data/artists.ts`
+- [x] Testar Admin Panel com dados reais do Firestore
+- [ ] Deploy no Netlify
