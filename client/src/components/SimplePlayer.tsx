@@ -27,16 +27,18 @@ export default function SimplePlayer({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
-  // Simular progresso de tempo
+  // Simular progresso de tempo (preview de 60 segundos máximo)
   useEffect(() => {
     if (isPlaying && currentTrack) {
       const [mins, secs] = currentTrack.duration.split(':').map(Number);
       const totalSeconds = mins * 60 + secs;
-      setDuration(totalSeconds);
+      // Limitar a 60 segundos (1 minuto) para preview
+      const previewDuration = Math.min(totalSeconds, 60);
+      setDuration(previewDuration);
       
       const interval = setInterval(() => {
         setCurrentTime((prev) => {
-          if (prev >= totalSeconds) {
+          if (prev >= previewDuration) {
             onNext();
             return 0;
           }

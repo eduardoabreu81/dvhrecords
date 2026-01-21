@@ -209,3 +209,9 @@
 - [x] **Modal centralizado**: Transformar visualização de artista em pop-up/modal centralizado ao invés de substituir o grid
 - [x] **Grid visível**: Manter grid de artistas visível com overlay escuro quando modal estiver aberto
 - [x] **Botão fechar**: Adicionar botão X no canto superior direito do modal para fechar
+
+## 🎵 Player no Modal
+
+- [x] **Player integrado**: Mover SimplePlayer para dentro do modal de artista ao invés de ficar fixo no rodapé
+- [x] **Layout ajustado**: Posicionar player no rodapé do modal, sempre visível mesmo com scroll
+- [x] **Preview de 1 minuto**: Tracks devem tocar apenas preview de no máximo 1 minuto (60 segundos)

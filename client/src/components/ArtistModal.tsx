@@ -1,8 +1,9 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Play } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Artist, Track } from '../data/artists';
+import SimplePlayer from './SimplePlayer';
 
 interface ArtistModalProps {
   artist: Artist | null;
@@ -13,6 +14,9 @@ interface ArtistModalProps {
 
 export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: ArtistModalProps) {
   const { t } = useTranslation();
+  const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
 
   // Fechar modal com ESC
   useEffect(() => {
@@ -33,10 +37,42 @@ export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: 
   if (!artist) return null;
 
   const handlePlayTrack = (track: Track) => {
+    const trackIndex = artist?.tracks.findIndex(t => t.id === track.id) ?? 0;
+    setCurrentTrackIndex(trackIndex);
+    setCurrentTrack(track);
+    setIsPlaying(true);
     if (onTrackChange) {
       onTrackChange(track, true);
     }
   };
+
+  const handlePlay = () => setIsPlaying(true);
+  const handlePause = () => setIsPlaying(false);
+  
+  const handleNext = () => {
+    if (!artist) return;
+    const nextIndex = (currentTrackIndex + 1) % artist.tracks.length;
+    setCurrentTrackIndex(nextIndex);
+    setCurrentTrack(artist.tracks[nextIndex]);
+    setIsPlaying(true);
+  };
+  
+  const handlePrevious = () => {
+    if (!artist) return;
+    const prevIndex = currentTrackIndex === 0 ? artist.tracks.length - 1 : currentTrackIndex - 1;
+    setCurrentTrackIndex(prevIndex);
+    setCurrentTrack(artist.tracks[prevIndex]);
+    setIsPlaying(true);
+  };
+
+  // Reset player ao trocar de artista
+  useEffect(() => {
+    if (artist) {
+      setCurrentTrack(null);
+      setIsPlaying(false);
+      setCurrentTrackIndex(0);
+    }
+  }, [artist?.id]);
 
   return (
     <AnimatePresence>
@@ -70,7 +106,8 @@ export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: 
               </button>
 
               {/* Conteúdo scrollable */}
-              <div className="overflow-y-auto max-h-[85vh] p-8">
+              <div className="flex flex-col max-h-[85vh]">
+                <div className="overflow-y-auto flex-1 p-8 pb-4">
                 {/* Header com foto e nome */}
                 <div className="flex flex-col md:flex-row gap-6 mb-8">
                   {/* Foto do artista */}
@@ -128,6 +165,22 @@ export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: 
                     ))}
                   </div>
                 </div>
+              </div>
+              
+              {/* Player fixo no rodapé do modal */}
+              {currentTrack && (
+                <div className="border-t-2 border-primary/30 bg-card/95 backdrop-blur-md">
+                  <SimplePlayer 
+                    artist={artist}
+                    currentTrack={currentTrack}
+                    isPlaying={isPlaying}
+                    onPlay={handlePlay}
+                    onPause={handlePause}
+                    onNext={handleNext}
+                    onPrevious={handlePrevious}
+                  />
+                </div>
+              )}
               </div>
             </motion.div>
           </div>
