@@ -76,7 +76,7 @@ export default function ArtistModal({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-              className="relative bg-card/95 backdrop-blur-md border-2 border-primary/30 rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-hidden glow-box-cyan"
+              className="relative bg-card/95 backdrop-blur-md border-2 border-primary/30 rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-hidden glow-box-cyan flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Botão Fechar */}
@@ -88,7 +88,7 @@ export default function ArtistModal({
               </button>
 
               {/* Conteúdo scrollable */}
-              <div className="overflow-y-auto max-h-[85vh] p-8">
+              <div className="overflow-y-auto flex-1 p-8">
                 {/* Header com foto e nome */}
                 <div className="flex flex-col md:flex-row gap-6 mb-8">
                   {/* Foto do artista */}
@@ -96,7 +96,7 @@ export default function ArtistModal({
                     <img
                       src={artist.image}
                       alt={artist.name}
-                      className="w-48 h-48 rounded-lg object-cover border-2 border-primary/30"
+                      className="w-48 h-48 rounded-full object-cover border-4 border-primary/30 shadow-lg shadow-primary/20"
                     />
                   </div>
 

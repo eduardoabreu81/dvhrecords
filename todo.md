@@ -229,3 +229,8 @@
 
 - [x] Player está aparecendo na página esmaecida ao invés de dentro do modal de artista
 - [x] Corrigir para player ficar fixo no rodapé do modal
+
+## 🎨 Melhorias de UX - Modal
+
+- [x] Ajustar altura do modal para acomodar player sem scroll excessivo
+- [x] Tornar imagem do artista circular (cortada em formato redondo)
