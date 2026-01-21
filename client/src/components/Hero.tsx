@@ -22,12 +22,12 @@ export default function Hero() {
       id="home"
       className="relative h-screen w-full flex items-center justify-center overflow-hidden"
     >
-      {/* Background: Imagem de DJ mixer com overlay */}
+      {/* Background: Mixer de DJ com overlay */}
       <div className="absolute inset-0">
         <div 
           className="absolute inset-0 bg-cover bg-center"
           style={{
-            backgroundImage: 'url(https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80)',
+            backgroundImage: 'url(https://images.unsplash.com/photo-1571330735066-03aaa9429d89?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80)',
           }}
         />
         {/* Overlay escuro */}
@@ -93,11 +93,11 @@ export default function Hero() {
         transition={{ duration: 1, ease: 'easeOut' }}
         className="relative z-10 flex flex-col items-center"
       >
-        {/* Logo DVH Records */}
+        {/* Logo DVH Records (apenas texto) */}
         <img
-          src="/images/dvh-logo.png"
+          src="/images/dvh-logo-text.png"
           alt="DVH Records"
-          className="w-full max-w-3xl mx-auto drop-shadow-[0_0_40px_rgba(0,240,255,0.6)]"
+          className="w-full max-w-4xl mx-auto drop-shadow-[0_0_50px_rgba(0,240,255,0.8)]"
         />
         
         {/* Tagline */}

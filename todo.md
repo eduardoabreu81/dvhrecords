@@ -102,3 +102,8 @@
 - [x] **Logo Hero**: Remover caixa do logo, deixar logo solto com imagem de DJ mixer ao fundo (como exemplo fornecido)
 - [x] **Bio da gravadora**: Adicionar seção dedicada para história/missão da DVH Records
 - [x] **Ícone de scroll**: Fazer ícone desaparecer conforme rolagem ao invés de ficar fixo
+
+## 🎨 Correção do Logo e Background
+
+- [x] **Logo**: Criar logo apenas com texto "DVH RECORDS" sem quadrado/caixa/fundo
+- [x] **Background Hero**: Trocar para imagem de mixer de DJ (console/controladora) ao invés de instrumentos musicais
