@@ -29,46 +29,58 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen snap-y snap-mandatory overflow-y-scroll h-screen">
       {/* Hero com parallax */}
-      <motion.div style={{ y: heroY }}>
-        <Hero />
-      </motion.div>
+      <section className="snap-start h-screen">
+        <motion.div style={{ y: heroY }}>
+          <Hero />
+        </motion.div>
+      </section>
 
       {/* Barra de Artistas (scroll horizontal) */}
-      <ArtistsBar 
+      <section className="snap-start min-h-screen flex flex-col">
+        <ArtistsBar 
         artists={mockArtists}
         selectedArtist={selectedArtist}
         onSelectArtist={handleSelectArtist}
       />
 
-      {/* Toca-discos + Bio do Artista */}
-      <section id="artists" className="relative py-20 bg-background/50">
-        <div className="container">
-          <motion.div style={{ y: turntableY }}>
-            <TurntableNew 
-              artist={selectedArtist}
-              onTrackChange={handleTrackChange}
-            />
-          </motion.div>
+        {/* Toca-discos + Bio do Artista */}
+        <div id="artists" className="relative flex-1 flex items-center bg-background/50">
+          <div className="container">
+            <motion.div style={{ y: turntableY }}>
+              <TurntableNew 
+                artist={selectedArtist}
+                onTrackChange={handleTrackChange}
+              />
+            </motion.div>
+          </div>
         </div>
       </section>
 
       {/* Label Bio */}
-      <LabelBio />
+      <section className="snap-start h-screen flex items-center">
+        <LabelBio />
+      </section>
 
       {/* About com parallax */}
-      <motion.div style={{ y: aboutY }}>
-        <About />
-      </motion.div>
+      <section className="snap-start h-screen flex items-center">
+        <motion.div style={{ y: aboutY }} className="w-full">
+          <About />
+        </motion.div>
+      </section>
 
       {/* Submit com parallax */}
-      <motion.div style={{ y: submitY }}>
-        <Submit />
-      </motion.div>
+      <section className="snap-start h-screen flex items-center">
+        <motion.div style={{ y: submitY }} className="w-full">
+          <Submit />
+        </motion.div>
+      </section>
 
       {/* Footer */}
-      <Footer />
+      <section className="snap-start h-screen flex items-end">
+        <Footer />
+      </section>
     </div>
   );
 }

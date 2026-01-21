@@ -48,7 +48,7 @@ export default function Hero() {
           className="relative z-50"
         >
           <img
-            src="/images/dvh-logo-waveform.png"
+            src="/images/dvh-logo-transparent.png"
             alt="DVH Records"
             className="h-12 md:h-20 w-auto drop-shadow-[0_0_30px_rgba(0,240,255,0.8)]"
           />

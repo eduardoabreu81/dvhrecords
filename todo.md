@@ -131,3 +131,8 @@
 - [x] **Navegação entre tracks**: Botões próxima/anterior (loop ao chegar no final)
 - [ ] **Corrigir STOP**: Waveform deve parar quando clicar em STOP (removido AudioPlayer antigo)
 - [x] **Melhorar logotipo**: Ajustar design do logo DVH Records (waveform)
+
+## 🔧 Correções Urgentes
+
+- [x] **Logo sem fundo**: Remover fundo preto do logo, deixar totalmente transparente
+- [x] **Scroll snap fullscreen**: Implementar rolagem que "gruda" em cada seção completa (100vh) como slides
