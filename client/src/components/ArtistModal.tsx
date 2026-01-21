@@ -34,7 +34,14 @@ export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: 
     };
   }, [isOpen, onClose]);
 
-  if (!artist) return null;
+  // Reset player ao trocar de artista
+  useEffect(() => {
+    if (artist) {
+      setCurrentTrack(null);
+      setIsPlaying(false);
+      setCurrentTrackIndex(0);
+    }
+  }, [artist?.id]);
 
   const handlePlayTrack = (track: Track) => {
     const trackIndex = artist?.tracks.findIndex(t => t.id === track.id) ?? 0;
@@ -65,14 +72,7 @@ export default function ArtistModal({ artist, isOpen, onClose, onTrackChange }: 
     setIsPlaying(true);
   };
 
-  // Reset player ao trocar de artista
-  useEffect(() => {
-    if (artist) {
-      setCurrentTrack(null);
-      setIsPlaying(false);
-      setCurrentTrackIndex(0);
-    }
-  }, [artist?.id]);
+  if (!artist) return null;
 
   return (
     <AnimatePresence>

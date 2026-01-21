@@ -20,13 +20,18 @@ let db: Firestore | undefined;
 let storage: FirebaseStorage | undefined;
 let auth: Auth | undefined;
 
-try {
-  app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-  storage = getStorage(app);
-  auth = getAuth(app);
-} catch (error) {
-  console.error('Firebase initialization error:', error);
+// Only initialize Firebase if API key is provided
+if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+  try {
+    app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+    storage = getStorage(app);
+    auth = getAuth(app);
+  } catch (error) {
+    console.error('Firebase initialization error:', error);
+  }
+} else {
+  console.warn('Firebase not initialized: Missing API key or project ID. Firebase features will be disabled.');
 }
 
 export { app, db, storage, auth };

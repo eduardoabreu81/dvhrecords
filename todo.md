@@ -215,3 +215,8 @@
 - [x] **Player integrado**: Mover SimplePlayer para dentro do modal de artista ao invés de ficar fixo no rodapé
 - [x] **Layout ajustado**: Posicionar player no rodapé do modal, sempre visível mesmo com scroll
 - [x] **Preview de 1 minuto**: Tracks devem tocar apenas preview de no máximo 1 minuto (60 segundos)
+
+## 🐛 Bugs Críticos
+
+- [x] **Erro de Hooks no ArtistModal**: "Rendered more hooks than during the previous render" - ordem inconsistente de Hooks
+- [x] **Firebase API Key inválida**: "Firebase: Error (auth/invalid-api-key)" - configuração precisa ser ajustada
