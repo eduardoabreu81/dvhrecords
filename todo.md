@@ -119,3 +119,15 @@
 - [x] **Background visível**: Deixar imagem do show/festival totalmente visível
 - [x] **Parallax no logo**: Logo acompanha scroll da página
 - [x] **Layout limpo**: Estilo minimalista como Critical Music
+
+## 🎵 Refatoração Completa do Sistema de Toca-Discos
+
+- [x] **Remover RecordBox e drag & drop**: Eliminar sistema de arrastar capas
+- [x] **Barra horizontal de artistas**: Criar scroll lateral com todas as capas visíveis
+- [x] **Clicar no artista**: Abrir bio ao lado do toca-discos (sem janela nova)
+- [x] **Lista de tracks clicável**: Dentro da bio, mostrar tracks do artista
+- [x] **Clicar na track**: Disco começa a girar automaticamente no toca-discos
+- [x] **Centralizar vinil**: Corrigir posicionamento do vinil no prato do toca-discos
+- [x] **Navegação entre tracks**: Botões próxima/anterior (loop ao chegar no final)
+- [ ] **Corrigir STOP**: Waveform deve parar quando clicar em STOP (removido AudioPlayer antigo)
+- [x] **Melhorar logotipo**: Ajustar design do logo DVH Records (waveform)

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import Hero from "@/components/Hero";
-import RecordBox from "@/components/RecordBox";
-import Turntable from "@/components/Turntable";
-import AudioPlayer from "@/components/AudioPlayer";
+import ArtistsBar from "@/components/ArtistsBar";
+import TurntableNew from "@/components/TurntableNew";
 import About from "@/components/About";
 import LabelBio from "@/components/LabelBio";
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
-import type { Artist } from '@/data/artists';
+import { mockArtists, type Artist, type Track } from '@/data/artists';
 
 export default function Home() {
   const [selectedArtist, setSelectedArtist] = useState<Artist | null>(null);
@@ -20,12 +19,13 @@ export default function Home() {
   const aboutY = useTransform(scrollYProgress, [0.5, 0.7], [50, -30]);
   const submitY = useTransform(scrollYProgress, [0.7, 0.9], [30, -20]);
 
-  const handlePlayArtist = (artist: Artist) => {
+  const handleSelectArtist = (artist: Artist) => {
     setSelectedArtist(artist);
   };
 
-  const handleClosePlayer = () => {
-    setSelectedArtist(null);
+  const handleTrackChange = (track: Track, isPlaying: boolean) => {
+    console.log('Track changed:', track.title, 'Playing:', isPlaying);
+    // Aqui você pode integrar com AudioPlayer se necessário
   };
 
   return (
@@ -35,15 +35,26 @@ export default function Home() {
         <Hero />
       </motion.div>
 
-      {/* RecordBox (fixo, sem parallax) */}
-      <RecordBox onSelectArtist={() => {}} />
+      {/* Barra de Artistas (scroll horizontal) */}
+      <ArtistsBar 
+        artists={mockArtists}
+        selectedArtist={selectedArtist}
+        onSelectArtist={handleSelectArtist}
+      />
 
-      {/* Turntable com parallax */}
-      <motion.div style={{ y: turntableY }}>
-        <Turntable onPlayArtist={handlePlayArtist} />
-      </motion.div>
+      {/* Toca-discos + Bio do Artista */}
+      <section id="artists" className="relative py-20 bg-background/50">
+        <div className="container">
+          <motion.div style={{ y: turntableY }}>
+            <TurntableNew 
+              artist={selectedArtist}
+              onTrackChange={handleTrackChange}
+            />
+          </motion.div>
+        </div>
+      </section>
 
-      {/* Label Bio (nova seção) */}
+      {/* Label Bio */}
       <LabelBio />
 
       {/* About com parallax */}
@@ -56,11 +67,8 @@ export default function Home() {
         <Submit />
       </motion.div>
 
-      {/* Footer (sem parallax) */}
+      {/* Footer */}
       <Footer />
-
-      {/* Audio Player (fixo) */}
-      <AudioPlayer artist={selectedArtist} onClose={handleClosePlayer} />
     </div>
   );
 }
