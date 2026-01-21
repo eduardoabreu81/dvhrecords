@@ -203,3 +203,9 @@
 - [x] **Sistema multilíngue**: Aplicar traduções PT/EN/ES em todos os componentes (ArtistsGrid e Releases)
 - [x] **Seletor de idioma**: Adicionar no menu Header
 - [ ] **Páginas dedicadas**: Criar rotas /artist/:id com bio completa, discografia, galeria e links sociais
+
+## 🔧 Correção Modal de Artista
+
+- [x] **Modal centralizado**: Transformar visualização de artista em pop-up/modal centralizado ao invés de substituir o grid
+- [x] **Grid visível**: Manter grid de artistas visível com overlay escuro quando modal estiver aberto
+- [x] **Botão fechar**: Adicionar botão X no canto superior direito do modal para fechar

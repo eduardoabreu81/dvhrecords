@@ -3,7 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import ArtistsGrid from "@/components/ArtistsGrid";
-import TurntableNew from "@/components/TurntableNew";
+import ArtistModal from "@/components/ArtistModal";
 import About from "@/components/About";
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
@@ -81,34 +81,12 @@ export default function Home() {
         
         <div className="container relative z-10 py-12">
           <motion.div style={{ y: artistsY }}>
-            {/* Grid de artistas */}
-            {!selectedArtist && (
-              <ArtistsGrid 
-                artists={mockArtists}
-                selectedArtist={selectedArtist}
-                onSelectArtist={handleSelectArtist}
-              />
-            )}
-            
-            {/* Bio e tracks do artista selecionado */}
-            {selectedArtist && (
-              <div className="space-y-6">
-                <button
-                  onClick={() => setSelectedArtist(null)}
-                  className="text-primary hover:text-primary/80 transition-colors flex items-center gap-2 mb-6"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  {/* TODO: Adicionar tradução */}
-                  Voltar para artistas
-                </button>
-                <TurntableNew 
-                  artist={selectedArtist}
-                  onTrackChange={handleTrackChange}
-                />
-              </div>
-            )}
+            {/* Grid de artistas sempre visível */}
+            <ArtistsGrid 
+              artists={mockArtists}
+              selectedArtist={selectedArtist}
+              onSelectArtist={handleSelectArtist}
+            />
           </motion.div>
         </div>
       </section>
@@ -141,6 +119,14 @@ export default function Home() {
       {/* Footer estático */}
       <Footer />
       </div>
+
+      {/* Modal de Artista */}
+      <ArtistModal 
+        artist={selectedArtist}
+        isOpen={!!selectedArtist}
+        onClose={() => setSelectedArtist(null)}
+        onTrackChange={handleTrackChange}
+      />
     </>
   );
 }
