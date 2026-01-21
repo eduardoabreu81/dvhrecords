@@ -111,3 +111,11 @@
 ## 🖼️ Correção da Imagem de Fundo Hero
 
 - [x] **Background Hero**: Trocar para imagem de multidão em show/festival de música eletrônica (como no exemplo fornecido) ao invés de mixer de DJ
+
+## 🎨 Refatoração Completa do Hero (Estilo Critical Music)
+
+- [x] **Logo no topo esquerdo**: Mover logo para canto superior esquerdo (não centralizado)
+- [x] **Remover caixa preta central**: Eliminar overlay escuro que bloqueia visualização do background
+- [x] **Background visível**: Deixar imagem do show/festival totalmente visível
+- [x] **Parallax no logo**: Logo acompanha scroll da página
+- [x] **Layout limpo**: Estilo minimalista como Critical Music
