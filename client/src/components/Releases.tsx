@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 
 interface Release {
   id: string;
@@ -33,6 +34,8 @@ const mockReleases: Release[] = [
 ];
 
 export default function Releases() {
+  const { t } = useTranslation();
+  
   return (
     <div className="bg-black/60 backdrop-blur-md rounded-lg border border-primary/30 p-6">
       <motion.h2
@@ -40,7 +43,7 @@ export default function Releases() {
         animate={{ opacity: 1, y: 0 }}
         className="text-3xl md:text-4xl font-display text-primary glow-cyan mb-6"
       >
-        LATEST RELEASES
+        {t('releases.title')}
       </motion.h2>
       
       <div className="space-y-4">

@@ -195,3 +195,11 @@
 
 - [x] **Sidebar de artistas**: Remover sidebar fixa, colocar lista de artistas DENTRO da seção Artists (não fixo em todas as páginas)
 - [x] **Latest Releases na Hero**: Mover seção Releases para DENTRO da página Hero ocupando metade da tela (não como seção separada)
+
+## 🎨 Próximas Implementações
+
+- [x] **Grid de artistas**: Criar grid/carrossel na seção Artists com fotos grandes dos artistas e nomes abaixo
+- [x] **Clique no artista**: Ao clicar, mostrar bio e lista de tracks ao lado
+- [x] **Sistema multilíngue**: Aplicar traduções PT/EN/ES em todos os componentes (ArtistsGrid e Releases)
+- [x] **Seletor de idioma**: Adicionar no menu Header
+- [ ] **Páginas dedicadas**: Criar rotas /artist/:id com bio completa, discografia, galeria e links sociais

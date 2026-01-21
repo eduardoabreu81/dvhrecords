@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,8 +33,11 @@ export default function Header() {
           </a>
         </motion.div>
 
-        {/* Menu Button no topo direito */}
-        <motion.button
+        {/* Language Switcher e Menu Button no topo direito */}
+        <div className="flex items-center gap-4">
+          <LanguageSwitcher />
+          
+          <motion.button
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           whileHover={{ scale: 1.1 }}
@@ -46,6 +50,7 @@ export default function Header() {
             <Menu className="w-6 h-6 text-primary" />
           )}
         </motion.button>
+        </div>
       </header>
 
       {/* Floating Menu */}

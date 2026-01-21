@@ -45,6 +45,15 @@ const resources = {
         volume: 'Volume',
         mute: 'Mudo',
       },
+      // Artists Section
+      artists: {
+        title: 'NOSSOS ARTISTAS',
+        backToArtists: 'Voltar para artistas',
+      },
+      // Releases Section
+      releases: {
+        title: 'ÚLTIMOS LANÇAMENTOS',
+      },
       // About Section
       about: {
         title: 'SOBRE DVH',
@@ -153,6 +162,15 @@ const resources = {
         volume: 'Volume',
         mute: 'Mute',
       },
+      // Artists Section
+      artists: {
+        title: 'OUR ARTISTS',
+        backToArtists: 'Back to artists',
+      },
+      // Releases Section
+      releases: {
+        title: 'LATEST RELEASES',
+      },
       // About Section
       about: {
         title: 'ABOUT DVH',
@@ -260,6 +278,15 @@ const resources = {
         tracks: 'Pistas',
         volume: 'Volumen',
         mute: 'Silenciar',
+      },
+      // Artists Section
+      artists: {
+        title: 'NUESTROS ARTISTAS',
+        backToArtists: 'Volver a artistas',
+      },
+      // Releases Section
+      releases: {
+        title: 'ÚLTIMOS LANZAMIENTOS',
       },
       // About Section
       about: {
