@@ -2,8 +2,19 @@ import { motion } from 'framer-motion';
 
 export default function About() {
   return (
-    <section id="about" className="min-h-screen bg-background flex items-center justify-center py-20 px-4">
-      <div className="container max-w-4xl">
+    <section 
+      id="about" 
+      className="min-h-screen bg-background flex items-center justify-center py-20 px-4 relative"
+      style={{
+        backgroundImage: 'url(https://images.unsplash.com/photo-1571330735066-03aaa9429d89?w=1920)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Overlay escuro para melhor legibilidade */}
+      <div className="absolute inset-0 bg-black/80" />
+      <div className="container max-w-4xl relative z-10">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}

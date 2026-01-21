@@ -35,8 +35,19 @@ export default function Submit() {
   };
 
   return (
-    <section id="submit" className="min-h-screen bg-background flex items-center justify-center py-20 px-4">
-      <div className="container max-w-3xl">
+    <section 
+      id="submit" 
+      className="min-h-screen bg-background flex items-center justify-center py-20 px-4 relative"
+      style={{
+        backgroundImage: 'url(https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1920)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat'
+      }}
+    >
+      {/* Overlay escuro para melhor legibilidade */}
+      <div className="absolute inset-0 bg-black/80" />
+      <div className="container max-w-3xl relative z-10">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}

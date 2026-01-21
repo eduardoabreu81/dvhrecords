@@ -136,3 +136,10 @@
 
 - [x] **Logo sem fundo**: Remover fundo preto do logo, deixar totalmente transparente
 - [x] **Scroll snap fullscreen**: Implementar rolagem que "gruda" em cada seção completa (100vh) como slides
+
+## 🎨 Ajustes de Layout
+
+- [x] **Toca-discos como background**: Usar imagem do toca-discos como fundo decorativo da seção Artists
+- [x] **Backgrounds temáticos**: Adicionar imagens de fundo para About e Submit
+- [x] **Rodapé estático**: Tornar rodapé fixo na parte inferior (não ocupa seção completa)
+- [x] **Remover duplicações**: Eliminar seção LabelBio duplicada (unificada com About)

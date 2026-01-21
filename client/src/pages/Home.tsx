@@ -4,7 +4,7 @@ import Hero from "@/components/Hero";
 import ArtistsBar from "@/components/ArtistsBar";
 import TurntableNew from "@/components/TurntableNew";
 import About from "@/components/About";
-import LabelBio from "@/components/LabelBio";
+
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
 import { mockArtists, type Artist, type Track } from '@/data/artists';
@@ -46,8 +46,19 @@ export default function Home() {
       />
 
         {/* Toca-discos + Bio do Artista */}
-        <div id="artists" className="relative flex-1 flex items-center bg-background/50">
-          <div className="container">
+        <div 
+          id="artists" 
+          className="relative flex-1 flex items-center bg-background/50"
+          style={{
+            backgroundImage: 'url(/images/turntable/technics-turntable.png)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          {/* Overlay escuro para melhor legibilidade */}
+          <div className="absolute inset-0 bg-black/70" />
+          <div className="container relative z-10">
             <motion.div style={{ y: turntableY }}>
               <TurntableNew 
                 artist={selectedArtist}
@@ -58,12 +69,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Label Bio */}
-      <section className="snap-start h-screen flex items-center">
-        <LabelBio />
-      </section>
-
-      {/* About com parallax */}
+      {/* About (Label Bio + About unificados) */}
       <section className="snap-start h-screen flex items-center">
         <motion.div style={{ y: aboutY }} className="w-full">
           <About />
@@ -77,10 +83,8 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Footer */}
-      <section className="snap-start h-screen flex items-end">
-        <Footer />
-      </section>
+      {/* Footer estático */}
+      <Footer />
     </div>
   );
 }
