@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Play } from 'lucide-react';
+import { X, Play, ExternalLink } from 'lucide-react';
+import { useLocation } from 'wouter';
 import { useTranslation } from 'react-i18next';
 import { Artist, Track } from '../hooks/useFirestoreArtists';
 import SimplePlayer from './SimplePlayer';
@@ -28,9 +29,10 @@ export default function ArtistModal({
   onPause,
   onNext,
   onPrevious,
-  onTrackChange 
+  onTrackChange,
 }: ArtistModalProps) {
   const { t } = useTranslation();
+  const [, setLocation] = useLocation();
 
   // Fechar modal com ESC
   useEffect(() => {
@@ -87,8 +89,8 @@ export default function ArtistModal({
                 <X className="w-5 h-5 text-primary group-hover:rotate-90 transition-transform" />
               </button>
 
-              {/* Conteúdo scrollable */}
-              <div className="overflow-y-auto flex-1 p-8">
+              {/* Conteúdo scrollable com scroll discreto */}
+              <div className="overflow-y-auto flex-1 p-8 scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50">
                 {/* Header com foto e nome */}
                 <div className="flex flex-col md:flex-row gap-6 mb-8">
                   {/* Foto do artista */}
@@ -106,7 +108,19 @@ export default function ArtistModal({
                       {artist.name}
                     </h2>
                     <p className="text-sm text-muted-foreground mb-4">{artist.genre}</p>
-                    <p className="text-foreground leading-relaxed">{artist.bio}</p>
+                    <p className="text-foreground leading-relaxed mb-4">{artist.bio}</p>
+                    
+                    {/* Botão Ver Perfil Completo */}
+                    <button
+                      onClick={() => {
+                        setLocation(`/artist/${artist.id}`);
+                        onClose();
+                      }}
+                      className="px-6 py-2 bg-primary/10 border border-primary/30 rounded-lg hover:bg-primary/20 hover:border-primary transition-all text-primary flex items-center gap-2"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      {t('viewFullProfile', 'Ver Perfil Completo')}
+                    </button>
                   </div>
                 </div>
 
@@ -148,9 +162,9 @@ export default function ArtistModal({
                 </div>
               </div>
 
-              {/* Player fixo no rodapé do modal */}
+              {/* Player fixo no rodapé do modal - sempre visível, sem scroll */}
               {currentTrack && (
-                <div className="border-t border-border bg-card/50 backdrop-blur-sm">
+                <div className="flex-shrink-0 border-t border-border bg-card/50 backdrop-blur-sm">
                   <SimplePlayer
                     artist={artist}
                     currentTrack={currentTrack}

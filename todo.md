@@ -234,3 +234,10 @@
 
 - [x] Ajustar altura do modal para acomodar player sem scroll excessivo
 - [x] Tornar imagem do artista circular (cortada em formato redondo)
+
+## 🎯 Melhorias Finais - Modal e Páginas Dedicadas
+
+- [x] Player fixo no rodapé do modal (sem scroll)
+- [x] Scroll discreto apenas no conteúdo (bio + tracks)
+- [x] Criar páginas dedicadas de artistas (/artist/:id) geradas automaticamente
+- [x] Adicionar botão "Ver Perfil Completo" no modal
