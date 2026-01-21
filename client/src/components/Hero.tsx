@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import Releases from './Releases';
 
 export default function Hero() {
 
@@ -24,14 +25,14 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00F0FF_1px,transparent_1px),linear-gradient(to_bottom,#00F0FF_1px,transparent_1px)] bg-[size:4rem_4rem]" />
       </div>
 
-      {/* Conteúdo Hero (centralizado verticalmente) */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-6">
-        {/* Tagline */}
+      {/* Conteúdo Hero: Grid 2 colunas (desktop) */}
+      <div className="relative z-10 min-h-screen flex flex-col lg:flex-row items-center justify-center px-6 gap-8 lg:gap-12">
+        {/* Coluna Esquerda: Tagline */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="text-center"
+          className="flex-1 text-center lg:text-left"
         >
           <h2 className="text-5xl md:text-7xl font-display text-white glow-cyan-strong mb-6">
             GLOBAL SOUNDS
@@ -39,6 +40,16 @@ export default function Hero() {
           <h3 className="text-3xl md:text-5xl font-display text-primary glow-cyan-strong">
             BASS DRIVEN
           </h3>
+        </motion.div>
+
+        {/* Coluna Direita: Latest Releases (metade da tela) */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.7, duration: 0.8 }}
+          className="flex-1 w-full max-w-2xl"
+        >
+          <Releases />
         </motion.div>
       </div>
     </section>

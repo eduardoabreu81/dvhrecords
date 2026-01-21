@@ -190,3 +190,8 @@
 - [x] **Latest Releases na Home**: Ocupar metade da página Home (desktop) com layout de quadrado grande + dados
 - [x] **Latest Releases**: Aparecer APENAS na página Home, não na seção Artists
 - [x] **Header fixo**: Deve aparecer em todas as seções (Hero, Artists, About, Submit)
+
+## 🔧 Correções Urgentes - Sidebar e Releases
+
+- [x] **Sidebar de artistas**: Remover sidebar fixa, colocar lista de artistas DENTRO da seção Artists (não fixo em todas as páginas)
+- [x] **Latest Releases na Hero**: Mover seção Releases para DENTRO da página Hero ocupando metade da tela (não como seção separada)
