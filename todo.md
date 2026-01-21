@@ -150,12 +150,17 @@
 
 ## 🎵 Player Estilo Winamp
 
-- [ ] **Interface clássica Winamp**: Design retrô com visual característico
-- [ ] **Playlist completa**: Lista de tracks do artista selecionado
+- [ ] **Imagem do disco**: Exibir capa do artista que está tocando
 - [ ] **Controles**: Play, Pause, Stop, Next, Previous
-- [ ] **Equalizer visual**: Visualizador de espectro de frequência
 - [ ] **Display de info**: Nome da track, artista, duração
+- [ ] **Visualizador de áudio**: Espectro de frequência simples
 - [ ] **Integração com Web Audio API**: Reprodução real de arquivos MP3/WAV
+
+## 🎭 Páginas Dedicadas de Artistas
+
+- [ ] **Criar rota /artist/:id**: Página individual para cada artista
+- [ ] **Link na bio**: Adicionar botão "Ver Página Completa" na bio do artista
+- [ ] **Conteúdo completo**: Bio expandida, discografia, links sociais, galeria
 
 ## 🌍 Sistema Multilíngue
 
