@@ -92,6 +92,37 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body), sans-serif;
+    position: relative;
+    overflow-x: hidden;
+  }
+  
+  /* Background global com imagem de música eletrônica */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    opacity: 0.12;
+    z-index: -2;
+  }
+  
+  /* Overlay escuro para melhor legibilidade */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(ellipse at center, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.92) 100%);
+    z-index: -1;
   }
   
   h1, h2, h3, h4, h5, h6 {

@@ -82,3 +82,16 @@
 3. Adicionar seção "Releases" (últimos lançamentos)
 4. Implementar sistema de busca de artistas
 5. Adicionar analytics e métricas
+
+## 🐛 Correções Necessárias
+
+- [x] **Caixa de Records**: Corrigir para abrir em painel lateral (não fullscreen) permitindo drag & drop para o toca-discos
+- [x] **Multilíngue**: Implementar sistema i18n com suporte a PT/EN/ES
+- [ ] **Traduções**: Traduzir todo o conteúdo do site (Hero, About, Submit, Admin, etc.) para os 3 idiomas
+- [x] **Seletor de idioma**: Adicionar botão/dropdown para trocar entre PT/EN/ES (componente criado)
+
+## 🎨 Melhorias Visuais
+
+- [x] **Background elaborado**: Adicionar imagem de fundo estilo música eletrônica (similar ao exemplo fornecido)
+- [x] **Parallax entre seções**: Implementar efeitos de profundidade nas transições entre seções
+- [x] **Overlay escuro**: Adicionar overlay semi-transparente sobre imagem de fundo para melhor legibilidade
