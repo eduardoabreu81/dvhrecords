@@ -5,6 +5,7 @@ import RecordBox from "@/components/RecordBox";
 import Turntable from "@/components/Turntable";
 import AudioPlayer from "@/components/AudioPlayer";
 import About from "@/components/About";
+import LabelBio from "@/components/LabelBio";
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
 import type { Artist } from '@/data/artists';
@@ -41,6 +42,9 @@ export default function Home() {
       <motion.div style={{ y: turntableY }}>
         <Turntable onPlayArtist={handlePlayArtist} />
       </motion.div>
+
+      {/* Label Bio (nova seção) */}
+      <LabelBio />
 
       {/* About com parallax */}
       <motion.div style={{ y: aboutY }}>

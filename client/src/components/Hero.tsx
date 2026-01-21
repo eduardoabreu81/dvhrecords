@@ -1,9 +1,13 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 
 export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const { scrollY } = useScroll();
+  
+  // Scroll indicator desaparece conforme rola
+  const scrollIndicatorOpacity = useTransform(scrollY, [0, 200], [1, 0]);
 
   const menuItems = [
     { label: 'Home', href: '#home' },
@@ -16,14 +20,26 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative h-screen w-full bg-background flex items-center justify-center overflow-hidden"
+      className="relative h-screen w-full flex items-center justify-center overflow-hidden"
     >
+      {/* Background: Imagem de DJ mixer com overlay */}
+      <div className="absolute inset-0">
+        <div 
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: 'url(https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80)',
+          }}
+        />
+        {/* Overlay escuro */}
+        <div className="absolute inset-0 bg-gradient-to-b from-background/90 via-background/80 to-background/95" />
+      </div>
+
       {/* Background animated grid */}
-      <div className="absolute inset-0 opacity-10">
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0 bg-[linear-gradient(to_right,#00F0FF_1px,transparent_1px),linear-gradient(to_bottom,#00F0FF_1px,transparent_1px)] bg-[size:4rem_4rem]" />
       </div>
 
-      {/* Menu Button (appears on hover) */}
+      {/* Menu Button */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -70,32 +86,36 @@ export default function Hero() {
         )}
       </AnimatePresence>
 
-      {/* Logo centralizado com glow effect */}
+      {/* Logo solto (sem caixa) com glow effect */}
       <motion.div
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, ease: 'easeOut' }}
-        className="relative z-10"
+        className="relative z-10 flex flex-col items-center"
       >
+        {/* Logo DVH Records */}
         <img
           src="/images/dvh-logo.png"
           alt="DVH Records"
-          className="w-full max-w-3xl mx-auto glow-box-cyan-strong"
+          className="w-full max-w-3xl mx-auto drop-shadow-[0_0_40px_rgba(0,240,255,0.6)]"
         />
+        
+        {/* Tagline */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
-          className="text-center text-primary text-xl md:text-2xl mt-8 font-body glow-cyan"
+          className="text-center text-primary text-xl md:text-2xl mt-8 font-body glow-cyan-strong"
         >
           Global sounds. Bass driven.
         </motion.p>
       </motion.div>
 
-      {/* Scroll indicator */}
+      {/* Scroll indicator (desaparece com rolagem) */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
+        style={{ opacity: scrollIndicatorOpacity }}
         transition={{ delay: 1.5 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >

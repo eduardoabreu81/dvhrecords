@@ -48,16 +48,7 @@ export default function RecordBox({ onSelectArtist }: RecordBoxProps) {
       <AnimatePresence>
         {isOpen && (
           <>
-            {/* Backdrop (semi-transparent) */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 z-45 bg-background/50 backdrop-blur-sm"
-            />
-
-            {/* Sidebar Panel */}
+            {/* Sidebar Panel (sem backdrop para permitir drag & drop) */}
             <motion.div
               initial={{ x: -400, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}

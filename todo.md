@@ -95,3 +95,10 @@
 - [x] **Background elaborado**: Adicionar imagem de fundo estilo música eletrônica (similar ao exemplo fornecido)
 - [x] **Parallax entre seções**: Implementar efeitos de profundidade nas transições entre seções
 - [x] **Overlay escuro**: Adicionar overlay semi-transparente sobre imagem de fundo para melhor legibilidade
+
+## 🐛 Novos Problemas Reportados
+
+- [x] **RecordBox backdrop**: Remover backdrop que esmae o fundo, deve permitir ver e interagir com o toca-discos
+- [x] **Logo Hero**: Remover caixa do logo, deixar logo solto com imagem de DJ mixer ao fundo (como exemplo fornecido)
+- [x] **Bio da gravadora**: Adicionar seção dedicada para história/missão da DVH Records
+- [x] **Ícone de scroll**: Fazer ícone desaparecer conforme rolagem ao invés de ficar fixo
