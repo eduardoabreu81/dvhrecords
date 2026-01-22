@@ -397,10 +397,6 @@ export async function updateAboutContent(content: Omit<AboutContent, 'id' | 'upd
     throw error;
   }
 }
-    console.error('Error updating about content:', error);
-    throw error;
-  }
-}
 
 /**
  * Create initial About content (if doesn't exist)
