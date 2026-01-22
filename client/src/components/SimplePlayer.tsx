@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { Artist, Track } from '@/hooks/useFirestoreArtists';
@@ -22,36 +22,85 @@ export default function SimplePlayer({
   onNext,
   onPrevious,
 }: SimplePlayerProps) {
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const [volume, setVolume] = useState(70);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [isReady, setIsReady] = useState(false);
 
-  // Simular progresso de tempo
+  // Inicializar/trocar áudio quando currentTrack mudar
   useEffect(() => {
-    if (isPlaying && currentTrack) {
-      // duration já é number (segundos)
-      const totalSeconds = currentTrack.duration || 0;
-      setDuration(totalSeconds);
+    if (currentTrack?.audioUrl) {
+      // Criar novo elemento de áudio
+      const audio = new Audio(currentTrack.audioUrl);
+      audioRef.current = audio;
       
-      const interval = setInterval(() => {
-        setCurrentTime((prev) => {
-          if (prev >= totalSeconds) {
-            onNext();
-            return 0;
-          }
-          return prev + 1;
-        });
-      }, 1000);
-      return () => clearInterval(interval);
-    }
-    // Não resetar currentTime quando pausar, apenas parar o intervalo
-  }, [isPlaying, currentTrack, onNext]);
+      // Event listeners
+      const handleLoadedMetadata = () => {
+        setDuration(audio.duration);
+        setIsReady(true);
+      };
+      
+      const handleTimeUpdate = () => {
+        setCurrentTime(audio.currentTime);
+      };
+      
+      const handleEnded = () => {
+        onNext();
+      };
+      
+      const handleError = (e: ErrorEvent) => {
+        console.error('Audio playback error:', e);
+        setIsReady(false);
+      };
 
-  // Resetar currentTime quando trocar de track
+      audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+      audio.addEventListener('timeupdate', handleTimeUpdate);
+      audio.addEventListener('ended', handleEnded);
+      audio.addEventListener('error', handleError as any);
+      
+      // Aplicar volume inicial
+      audio.volume = volume / 100;
+      
+      return () => {
+        audio.pause();
+        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        audio.removeEventListener('timeupdate', handleTimeUpdate);
+        audio.removeEventListener('ended', handleEnded);
+        audio.removeEventListener('error', handleError as any);
+        audioRef.current = null;
+      };
+    } else {
+      // Fallback: usar duração do objeto track se não houver audioUrl
+      if (currentTrack?.duration) {
+        setDuration(currentTrack.duration);
+        setIsReady(true);
+      }
+    }
+  }, [currentTrack, onNext, volume]);
+
+  // Controlar play/pause
   useEffect(() => {
-    setCurrentTime(0);
-  }, [currentTrack]);
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying && isReady) {
+      audio.play().catch(err => {
+        console.error('Failed to play audio:', err);
+      });
+    } else {
+      audio.pause();
+    }
+  }, [isPlaying, isReady]);
+
+  // Controlar volume
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (audio) {
+      audio.volume = isMuted ? 0 : volume / 100;
+    }
+  }, [volume, isMuted]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -67,6 +116,19 @@ export default function SimplePlayer({
 
   const toggleMute = () => {
     setIsMuted(!isMuted);
+  };
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const audio = audioRef.current;
+    if (!audio || !duration) return;
+
+    const bounds = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - bounds.left;
+    const percentage = x / bounds.width;
+    const newTime = percentage * duration;
+    
+    audio.currentTime = newTime;
+    setCurrentTime(newTime);
   };
 
   if (!artist || !currentTrack) {
@@ -143,16 +205,18 @@ export default function SimplePlayer({
 
             {/* Progress */}
             <div className="hidden md:flex flex-col flex-1 max-w-xs">
-              <div className="h-1 bg-gray-700 rounded-full overflow-hidden mb-1">
+              <div 
+                className="h-1 bg-gray-700 rounded-full overflow-hidden mb-1 cursor-pointer"
+                onClick={handleProgressClick}
+              >
                 <motion.div
                   className="h-full bg-primary"
-                  initial={{ width: '0%' }}
-                  animate={{ width: `${(currentTime / duration) * 100}%` }}
+                  style={{ width: `${(currentTime / duration) * 100}%` }}
                 />
               </div>
               <div className="flex items-center justify-between text-xs text-foreground/50">
-                <span>{formatTime(currentTime)}</span>
-                <span>{formatTime(duration)}</span>
+                <span>{formatTime(Math.floor(currentTime))}</span>
+                <span>{formatTime(Math.floor(duration))}</span>
               </div>
             </div>
 

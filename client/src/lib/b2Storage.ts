@@ -1,58 +1,52 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
-
-// Backblaze B2 S3-compatible client
-const b2Client = new S3Client({
-  endpoint: `https://${import.meta.env.VITE_B2_ENDPOINT}`,
-  region: import.meta.env.VITE_B2_REGION,
-  credentials: {
-    accessKeyId: import.meta.env.VITE_B2_KEY_ID,
-    secretAccessKey: import.meta.env.VITE_B2_APPLICATION_KEY,
-  },
-});
-
-const bucketName = import.meta.env.VITE_B2_BUCKET_NAME;
+import { trpc } from './trpc';
 
 /**
- * Upload file to Backblaze B2
+ * Upload file to Backblaze B2 via secure backend endpoint
  * @param file File to upload
- * @param folder Folder path (e.g., 'images', 'audio')
+ * @param folder Folder path (e.g., 'images', 'audio', 'covers')
  * @returns Public URL of uploaded file
  */
-export async function uploadToB2(file: File, folder: string): Promise<string> {
-  const fileName = `${folder}/${Date.now()}-${file.name}`;
-  
-  const command = new PutObjectCommand({
-    Bucket: bucketName,
-    Key: fileName,
-    Body: file,
-    ContentType: file.type,
-    ACL: 'public-read',
+export async function uploadToB2(file: File, folder: 'images' | 'audio' | 'covers'): Promise<string> {
+  // Converter arquivo para base64
+  const base64 = await fileToBase64(file);
+
+  // Chamar endpoint backend seguro
+  const result = await trpc.storage.upload.mutate({
+    fileBase64: base64,
+    fileName: file.name,
+    folder,
+    contentType: file.type,
   });
 
-  await b2Client.send(command);
+  if (!result.success || !result.url) {
+    throw new Error('Upload failed');
+  }
 
-  // Construct public URL
-  const publicUrl = `https://${import.meta.env.VITE_B2_ENDPOINT}/file/${bucketName}/${fileName}`;
-  return publicUrl;
+  return result.url;
 }
 
 /**
- * Delete file from Backblaze B2
+ * Delete file from Backblaze B2 via secure backend endpoint
  * @param fileUrl Full URL of the file to delete
  */
 export async function deleteFromB2(fileUrl: string): Promise<void> {
-  // Extract file key from URL
-  const urlParts = fileUrl.split(`/file/${bucketName}/`);
-  if (urlParts.length < 2) {
-    throw new Error('Invalid B2 file URL');
-  }
-  
-  const fileKey = urlParts[1];
-
-  const command = new DeleteObjectCommand({
-    Bucket: bucketName,
-    Key: fileKey,
-  });
-
-  await b2Client.send(command);
+  await trpc.storage.delete.mutate({ fileUrl });
 }
+
+/**
+ * Helper: Convert File to base64
+ */
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const result = reader.result as string;
+      // Remove data URL prefix (e.g., "data:image/png;base64,")
+      const base64 = result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+

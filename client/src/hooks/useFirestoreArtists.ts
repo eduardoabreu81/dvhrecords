@@ -85,16 +85,35 @@ export function useFirestoreArtists() {
           ...doc.data()
         })) as Release[];
         
-        // Aninhar tracks nos artistas
+        // Otimização: Criar maps para lookups O(1) em vez de filter/find O(n)
+        
+        // Map de tracks por artistId - O(n)
+        const tracksByArtist = tracksData.reduce((acc, track) => {
+          if (track.artistId) {
+            if (!acc[track.artistId]) {
+              acc[track.artistId] = [];
+            }
+            acc[track.artistId].push(track);
+          }
+          return acc;
+        }, {} as Record<string, Track[]>);
+        
+        // Map de artistas por ID - O(n)
+        const artistsById = artistsRaw.reduce((acc, artist: any) => {
+          acc[artist.id] = artist;
+          return acc;
+        }, {} as Record<string, any>);
+        
+        // Aninhar tracks nos artistas com lookup O(1) - total O(n)
         const artistsData = artistsRaw.map((artist: any) => ({
           ...artist,
           image: artist.imageUrl || artist.image || '',
-          tracks: tracksData.filter(track => track.artistId === artist.id)
+          tracks: tracksByArtist[artist.id] || []
         })) as Artist[];
         
-        // Enriquecer releases com artistName
+        // Enriquecer releases com artistName usando lookup O(1) - total O(n)
         const enrichedReleases = releasesData.map(release => {
-          const artist = artistsRaw.find((a: any) => a.id === release.artistId) as any;
+          const artist = artistsById[release.artistId];
           return {
             ...release,
             artistName: artist?.name || 'Unknown Artist'

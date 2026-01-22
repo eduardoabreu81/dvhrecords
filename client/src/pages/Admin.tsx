@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Edit, Trash2, LogOut, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuth } from '@/hooks/useAuth';
 import { getAllArtists, deleteArtist } from '@/lib/firebaseHelpers';
 import type { Artist } from '@/hooks/useFirestoreArtists';
@@ -26,8 +27,10 @@ export default function Admin() {
     try {
       const data = await getAllArtists();
       setArtists(data);
+      toast.success(`${data.length} artistas carregados`);
     } catch (error) {
       console.error('Error loading artists:', error);
+      toast.error('Erro ao carregar artistas');
     } finally {
       setLoading(false);
     }
@@ -37,21 +40,32 @@ export default function Admin() {
     e.preventDefault();
     setLoginError('');
     
+    const loadingToast = toast.loading('Fazendo login...');
     const success = await login(email, password);
+    toast.dismiss(loadingToast);
+    
     if (!success) {
       setLoginError('Email ou senha inválidos');
+      toast.error('Email ou senha inválidos');
+    } else {
+      toast.success('Login realizado com sucesso!');
     }
   };
 
   const handleDelete = async (id: string, name: string) => {
     if (!confirm(`Tem certeza que deseja deletar ${name}?`)) return;
 
+    const loadingToast = toast.loading(`Deletando ${name}...`);
+    
     try {
       await deleteArtist(id);
       setArtists(artists.filter((a) => a.id !== id));
+      toast.dismiss(loadingToast);
+      toast.success(`${name} deletado com sucesso!`);
     } catch (error) {
       console.error('Error deleting artist:', error);
-      alert('Erro ao deletar artista');
+      toast.dismiss(loadingToast);
+      toast.error('Erro ao deletar artista');
     }
   };
 

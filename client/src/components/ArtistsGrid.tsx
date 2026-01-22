@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import { Artist } from '../hooks/useFirestoreArtists';
+import { useState } from 'react';
 
 interface ArtistsGridProps {
   artists: Artist[];
@@ -10,6 +11,11 @@ interface ArtistsGridProps {
 
 export default function ArtistsGrid({ artists, selectedArtist, onSelectArtist }: ArtistsGridProps) {
   const { t } = useTranslation();
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set());
+
+  const handleImageError = (artistId: string) => {
+    setImageErrors(prev => new Set(prev).add(artistId));
+  };
   
   return (
     <div className="py-12">
@@ -35,12 +41,24 @@ export default function ArtistsGrid({ artists, selectedArtist, onSelectArtist }:
             }`}
           >
             {/* Foto do Artista (quadrada grande) */}
-            <div className="relative aspect-square rounded-lg overflow-hidden mb-3">
-              <img
-                src={artist.image}
-                alt={artist.name}
-                className="w-full h-full object-cover transition-transform group-hover:scale-110"
-              />
+            <div className="relative aspect-square rounded-lg overflow-hidden mb-3 bg-primary/10">
+              {imageErrors.has(artist.id) ? (
+                // Fallback quando imagem falha
+                <div className="w-full h-full flex items-center justify-center text-primary/50">
+                  <div className="text-center p-4">
+                    <div className="text-4xl mb-2">🎵</div>
+                    <div className="text-xs">{artist.name}</div>
+                  </div>
+                </div>
+              ) : (
+                <img
+                  src={artist.image}
+                  alt={artist.name}
+                  loading="lazy"
+                  onError={() => handleImageError(artist.id)}
+                  className="w-full h-full object-cover transition-transform group-hover:scale-110"
+                />
+              )}
               {/* Overlay com glow effect */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               

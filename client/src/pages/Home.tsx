@@ -3,12 +3,14 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import ArtistsGrid from "@/components/ArtistsGrid";
+import ArtistsGridSkeleton from "@/components/ArtistsGridSkeleton";
 import ArtistModal from "@/components/ArtistModal";
 import About from "@/components/About";
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
 import SimplePlayer from "@/components/SimplePlayer";
 import { useFirestoreArtists, type Artist, type Track } from '@/hooks/useFirestoreArtists';
+import { toast } from 'sonner';
 
 export default function Home() {
   const { artists, tracks, releases, loading, error } = useFirestoreArtists();
@@ -53,6 +55,11 @@ export default function Home() {
     setIsPlaying(true);
   };
 
+  // Mostrar erro com toast
+  if (error) {
+    toast.error(error);
+  }
+
   return (
     <>
       {/* Header fixo global (aparece em todas as seções) */}
@@ -84,9 +91,12 @@ export default function Home() {
           <motion.div style={{ y: artistsY }}>
             {/* Grid de artistas sempre visível */}
             {loading ? (
-              <div className="text-center text-primary">Loading artists...</div>
+              <ArtistsGridSkeleton />
             ) : error ? (
-              <div className="text-center text-red-500">{error}</div>
+              <div className="text-center py-12">
+                <div className="text-red-500 text-lg mb-4">Erro ao carregar artistas</div>
+                <p className="text-foreground/70">{error}</p>
+              </div>
             ) : (
               <ArtistsGrid 
                 artists={artists}
