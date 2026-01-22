@@ -1,4 +1,4 @@
-import { trpc } from './trpc';
+import { trpcClient } from './trpc';
 
 /**
  * Upload file to Backblaze B2 via secure backend endpoint
@@ -11,7 +11,7 @@ export async function uploadToB2(file: File, folder: 'images' | 'audio' | 'cover
   const base64 = await fileToBase64(file);
 
   // Chamar endpoint backend seguro
-  const result = await trpc.storage.upload.mutate({
+  const result = await trpcClient.storage.upload.mutate({
     fileBase64: base64,
     fileName: file.name,
     folder,
@@ -30,7 +30,7 @@ export async function uploadToB2(file: File, folder: 'images' | 'audio' | 'cover
  * @param fileUrl Full URL of the file to delete
  */
 export async function deleteFromB2(fileUrl: string): Promise<void> {
-  await trpc.storage.delete.mutate({ fileUrl });
+  await trpcClient.storage.delete.mutate({ fileUrl });
 }
 
 /**
