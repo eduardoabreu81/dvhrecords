@@ -9,6 +9,7 @@ import About from "@/components/About";
 import Submit from "@/components/Submit";
 import Footer from "@/components/Footer";
 import SimplePlayer from "@/components/SimplePlayer";
+import Greeting from "@/components/Greeting";
 import { useFirestoreArtists, type Artist, type Track } from '@/hooks/useFirestoreArtists';
 import { toast } from 'sonner';
 
@@ -64,6 +65,9 @@ export default function Home() {
     <>
       {/* Header fixo global (aparece em todas as seções) */}
       <Header />
+      
+      {/* Greeting component */}
+      <Greeting />
       
       <div className="min-h-screen snap-y snap-mandatory overflow-y-scroll h-screen pb-20">
       {/* Hero com parallax */}
