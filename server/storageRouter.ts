@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { protectedProcedure, router } from './_core/trpc';
-import { uploadToB2, deleteFromB2 } from './b2Storage';
+import { publicProcedure, protectedProcedure, router } from './_core/trpc';
+import { uploadToB2, deleteFromB2, fileExistsInB2 } from './b2Storage';
 import { TRPCError } from '@trpc/server';
 
 // Schema para validação de uploads
@@ -17,9 +17,10 @@ const deleteSchema = z.object({
 
 export const storageRouter = router({
   /**
-   * Upload de arquivo para B2 (protegido - requer autenticação)
+   * Upload de arquivo para B2
+   * Nota: Público mas com validações rigorosas de tamanho e tipo
    */
-  upload: protectedProcedure
+  upload: publicProcedure
     .input(uploadSchema)
     .mutation(async ({ input }: { input: z.infer<typeof uploadSchema> }) => {
       try {
@@ -83,6 +84,24 @@ export const storageRouter = router({
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
           message: 'Failed to delete file',
+        });
+      }
+    }),
+
+  /**
+   * Verificar se arquivo existe no B2 (público - usado para sincronização)
+   */
+  checkFileExists: publicProcedure
+    .input(z.object({ fileUrl: z.string().url() }))
+    .query(async ({ input }) => {
+      try {
+        const exists = await fileExistsInB2(input.fileUrl);
+        return { exists };
+      } catch (error) {
+        console.error('Check file error:', error);
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Failed to check file existence',
         });
       }
     }),

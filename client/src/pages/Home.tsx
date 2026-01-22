@@ -131,6 +131,7 @@ export default function Home() {
       {/* Modal de Artista */}
       <ArtistModal 
         artist={selectedArtist}
+        releases={releases}
         isOpen={!!selectedArtist}
         onClose={() => setSelectedArtist(null)}
         currentTrack={currentTrack}

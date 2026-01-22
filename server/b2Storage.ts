@@ -1,5 +1,5 @@
 // Server-side B2 Storage - Credentials protegidas
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, DeleteObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
 
 // Garantir que as variáveis de ambiente estão disponíveis
 if (!process.env.VITE_B2_ENDPOINT || !process.env.VITE_B2_KEY_ID || !process.env.VITE_B2_APPLICATION_KEY || !process.env.VITE_B2_BUCKET_NAME || !process.env.VITE_B2_REGION) {
@@ -46,8 +46,13 @@ export async function uploadToB2(
 
   await b2Client.send(command);
 
-  // Construct public URL
-  const publicUrl = `https://${process.env.VITE_B2_ENDPOINT}/file/${bucketName}/${key}`;
+  // Construct public URL using B2 friendly URL format
+  // B2 public URL format: https://f{region-number}.backblazeb2.com/file/{bucket}/{key}
+  // Extract region number from endpoint (e.g., "s3.us-east-005" -> "005")
+  const regionMatch = process.env.VITE_B2_ENDPOINT?.match(/(\d{3})/);
+  const regionNumber = regionMatch ? regionMatch[1] : '005';
+  const publicUrl = `https://f${regionNumber}.backblazeb2.com/file/${bucketName}/${key}`;
+  
   return publicUrl;
 }
 
@@ -70,4 +75,36 @@ export async function deleteFromB2(fileUrl: string): Promise<void> {
   });
 
   await b2Client.send(command);
+}
+
+/**
+ * Check if file exists in Backblaze B2 (SERVER-SIDE ONLY)
+ * @param fileUrl Full URL of the file to check
+ * @returns true if file exists, false otherwise
+ */
+export async function fileExistsInB2(fileUrl: string): Promise<boolean> {
+  try {
+    // Extract file key from URL
+    const urlParts = fileUrl.split(`/file/${bucketName}/`);
+    if (urlParts.length < 2) {
+      return false;
+    }
+
+    const fileKey = urlParts[1];
+
+    const command = new HeadObjectCommand({
+      Bucket: bucketName,
+      Key: fileKey,
+    });
+
+    await b2Client.send(command);
+    return true;
+  } catch (error: any) {
+    // Se o erro for 404 (NotFound), o arquivo não existe
+    if (error.name === 'NotFound' || error.$metadata?.httpStatusCode === 404) {
+      return false;
+    }
+    // Para outros erros, re-throw
+    throw error;
+  }
 }

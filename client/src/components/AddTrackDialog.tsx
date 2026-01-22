@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
 import { createTrack, uploadAudio } from '@/lib/firebaseHelpers';
 import type { Artist } from '@/hooks/useFirestoreArtists';
 
@@ -29,10 +30,10 @@ export default function AddTrackDialog({
   onSuccess,
 }: AddTrackDialogProps) {
   const [title, setTitle] = useState('');
-  const [artistId, setArtistId] = useState('');
-  const [releaseDate, setReleaseDate] = useState('');
+  const [artistIds, setArtistIds] = useState<string[]>([]);
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [duration, setDuration] = useState<number>(0);
+  const [tag, setTag] = useState<'unreleased' | 'tbd' | 'dubplate' | 'exclusive' | 'premiere' | ''>('');
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -75,13 +76,8 @@ export default function AddTrackDialog({
       return;
     }
 
-    if (!artistId) {
-      toast.error('Selecione um artista');
-      return;
-    }
-
-    if (!releaseDate) {
-      toast.error('Selecione a data de lançamento');
+    if (artistIds.length === 0) {
+      toast.error('Selecione pelo menos um artista');
       return;
     }
 
@@ -102,10 +98,10 @@ export default function AddTrackDialog({
       // 2. Criar track no Firestore
       await createTrack({
         title: title.trim(),
-        artistId,
-        releaseDate,
+        artistIds,
         audioUrl,
         duration,
+        tag: tag || undefined,
       });
 
       toast.dismiss(uploadToast);
@@ -113,8 +109,8 @@ export default function AddTrackDialog({
 
       // Resetar formulário
       setTitle('');
-      setArtistId('');
-      setReleaseDate('');
+      setArtistIds([]);
+      setTag('');
       setAudioFile(null);
       setDuration(0);
       if (fileInputRef.current) {
@@ -191,42 +187,93 @@ export default function AddTrackDialog({
                   />
                 </div>
 
-                {/* Artista */}
+                {/* Artistas */}
                 <div className="space-y-2">
                   <Label htmlFor="artist" className="text-primary/70">
-                    Artista *
+                    Artistas *
                   </Label>
-                  <Select
-                    value={artistId}
-                    onValueChange={setArtistId}
-                    disabled={uploading}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecione um artista" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {artists.map((artist) => (
-                        <SelectItem key={artist.id} value={artist.id}>
-                          {artist.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <div className="space-y-3">
+                    {artistIds.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {artistIds.map(artistId => {
+                          const artist = artists.find(a => a.id === artistId);
+                          return (
+                            <Badge key={artistId} variant="secondary" className="flex items-center gap-1">
+                              {artist?.name}
+                              <button
+                                type="button"
+                                onClick={() => setArtistIds(artistIds.filter(id => id !== artistId))}
+                                className="ml-1 hover:text-destructive"
+                                disabled={uploading}
+                              >
+                                <X className="w-3 h-3" />
+                              </button>
+                            </Badge>
+                          );
+                        })}
+                      </div>
+                    )}
+                    
+                    <Select
+                      value=""
+                      onValueChange={(value) => {
+                        if (value && !artistIds.includes(value)) {
+                          setArtistIds([...artistIds, value]);
+                        }
+                      }}
+                      disabled={uploading}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Adicionar artista..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {artists
+                          .filter(artist => !artistIds.includes(artist.id))
+                          .map((artist) => (
+                            <SelectItem key={artist.id} value={artist.id}>
+                              {artist.name}
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
                 </div>
 
-                {/* Data de Lançamento */}
+                {/* Tag */}
                 <div className="space-y-2">
-                  <Label htmlFor="releaseDate" className="text-primary/70">
-                    Data de Lançamento *
+                  <Label htmlFor="tag" className="text-primary/70">
+                    Tag (opcional)
                   </Label>
-                  <Input
-                    id="releaseDate"
-                    type="date"
-                    value={releaseDate}
-                    onChange={(e) => setReleaseDate(e.target.value)}
-                    disabled={uploading}
-                    required
-                  />
+                  <div className="flex gap-2">
+                    <Select
+                      value={tag || undefined}
+                      onValueChange={(value) => setTag(value as any)}
+                      disabled={uploading}
+                    >
+                      <SelectTrigger className="flex-1">
+                        <SelectValue placeholder="Nenhuma tag" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="unreleased">Unreleased</SelectItem>
+                        <SelectItem value="tbd">TBD</SelectItem>
+                        <SelectItem value="dubplate">Dubplate</SelectItem>
+                        <SelectItem value="exclusive">Exclusive</SelectItem>
+                        <SelectItem value="premiere">Premiere</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {tag && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setTag('')}
+                        disabled={uploading}
+                        className="px-3"
+                      >
+                        Limpar
+                      </Button>
+                    )}
+                  </div>
                 </div>
 
                 {/* Upload de Áudio */}

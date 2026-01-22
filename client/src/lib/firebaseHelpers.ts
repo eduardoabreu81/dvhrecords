@@ -6,6 +6,7 @@ import {
   addDoc,
   updateDoc,
   deleteDoc,
+  setDoc,
   query,
   orderBy,
   Timestamp,
@@ -137,7 +138,8 @@ export async function getAllTracks(): Promise<Track[]> {
   try {
     const { db: firestore } = ensureFirebaseInitialized();
     const tracksRef = collection(firestore, 'tracks');
-    const q = query(tracksRef, orderBy('releaseDate', 'desc'));
+    // Ordenar por título já que releaseDate é opcional
+    const q = query(tracksRef, orderBy('title', 'asc'));
     const snapshot = await getDocs(q);
     
     return snapshot.docs.map((doc) => ({
@@ -214,6 +216,76 @@ export async function deleteTrack(id: string): Promise<void> {
   }
 }
 
+// ==================== RELEASES ====================
+
+/**
+ * Get all releases
+ */
+export async function getAllReleases() {
+  try {
+    const { db: firestore } = ensureFirebaseInitialized();
+    const releasesSnapshot = await getDocs(collection(firestore, 'releases'));
+    return releasesSnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error fetching releases:', error);
+    throw error;
+  }
+}
+
+/**
+ * Create new release
+ */
+export async function createRelease(releaseData: any): Promise<string> {
+  try {
+    const { db: firestore } = ensureFirebaseInitialized();
+    const releasesRef = collection(firestore, 'releases');
+    const docRef = await addDoc(releasesRef, {
+      ...releaseData,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now(),
+    });
+    
+    return docRef.id;
+  } catch (error) {
+    console.error('Error creating release:', error);
+    throw error;
+  }
+}
+
+/**
+ * Update existing release
+ */
+export async function updateRelease(id: string, releaseData: any): Promise<void> {
+  try {
+    const { db: firestore } = ensureFirebaseInitialized();
+    const releaseRef = doc(firestore, 'releases', id);
+    await updateDoc(releaseRef, {
+      ...releaseData,
+      updatedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error('Error updating release:', error);
+    throw error;
+  }
+}
+
+/**
+ * Delete release
+ */
+export async function deleteRelease(id: string): Promise<void> {
+  try {
+    const { db: firestore } = ensureFirebaseInitialized();
+    const releaseRef = doc(firestore, 'releases', id);
+    await deleteDoc(releaseRef);
+  } catch (error) {
+    console.error('Error deleting release:', error);
+    throw error;
+  }
+}
+
 // ==================== STORAGE ====================
 
 /**
@@ -267,4 +339,89 @@ export function generateUniqueFilename(originalName: string): string {
   const randomStr = Math.random().toString(36).substring(2, 8);
   const extension = originalName.split('.').pop();
   return `${timestamp}-${randomStr}.${extension}`;
+}
+
+// ==================== ABOUT ====================
+
+export interface AboutContent {
+  id?: string;
+  title: string;
+  paragraphs: string[];
+  philosophyTitle: string;
+  philosophyItems: {
+    title: string;
+    description: string;
+  }[];
+  tagline: string;
+  backgroundImage?: string;
+  updatedAt?: Timestamp;
+}
+
+/**
+ * Get About content from Firestore
+ */
+export async function getAboutContent(): Promise<AboutContent | null> {
+  try {
+    const { db: firestore } = ensureFirebaseInitialized();
+    const aboutRef = doc(firestore, 'settings', 'about');
+    const snapshot = await getDoc(aboutRef);
+    
+    if (!snapshot.exists()) {
+      return null;
+    }
+    
+    return {
+      id: snapshot.id,
+      ...snapshot.data(),
+    } as AboutContent;
+  } catch (error) {
+    console.error('Error fetching about content:', error);
+    throw error;
+  }
+}
+
+/**
+ * Update About content in Firestore
+ */
+export async function updateAboutContent(content: Omit<AboutContent, 'id' | 'updatedAt'>): Promise<void> {
+  try {
+    const { db: firestore } = ensureFirebaseInitialized();
+    const aboutRef = doc(firestore, 'settings', 'about');
+    
+    await setDoc(aboutRef, {
+      ...content,
+      updatedAt: Timestamp.now(),
+    }, { merge: true });
+  } catch (error) {
+    console.error('Error updating about content:', error);
+    throw error;
+  }
+}
+    console.error('Error updating about content:', error);
+    throw error;
+  }
+}
+
+/**
+ * Create initial About content (if doesn't exist)
+ */
+export async function createAboutContent(content: Omit<AboutContent, 'id' | 'updatedAt'>): Promise<void> {
+  try {
+    const { db: firestore } = ensureFirebaseInitialized();
+    const aboutRef = doc(firestore, 'settings', 'about');
+    
+    // Check if already exists
+    const snapshot = await getDoc(aboutRef);
+    if (snapshot.exists()) {
+      throw new Error('About content already exists. Use updateAboutContent instead.');
+    }
+    
+    await setDoc(aboutRef, {
+      ...content,
+      updatedAt: Timestamp.now(),
+    });
+  } catch (error) {
+    console.error('Error creating about content:', error);
+    throw error;
+  }
 }

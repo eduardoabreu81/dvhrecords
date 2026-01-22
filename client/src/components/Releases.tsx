@@ -9,10 +9,26 @@ export default function Releases() {
   if (loading) {
     return (
       <div className="bg-black/60 backdrop-blur-md rounded-lg border border-primary/30 p-6">
-        <h2 className="text-3xl md:text-4xl font-display text-primary glow-cyan mb-6">
-          {t('releases.title')}
-        </h2>
-        <p className="text-muted-foreground">{t('common.loading')}</p>
+        <div className="h-10 w-48 bg-primary/20 rounded animate-pulse mb-6" />
+        
+        <div className="space-y-4">
+          {[...Array(2)].map((_, i) => (
+            <div key={i} className="flex gap-4 bg-card/30 border border-border rounded-lg p-4">
+              {/* Cover skeleton */}
+              <div className="w-24 h-24 rounded bg-primary/20 animate-pulse flex-shrink-0" />
+              
+              {/* Content skeleton */}
+              <div className="flex-1 space-y-3">
+                <div className="h-6 w-3/4 bg-primary/20 rounded animate-pulse" />
+                <div className="h-4 w-1/2 bg-primary/10 rounded animate-pulse" />
+                <div className="flex gap-2">
+                  <div className="h-8 w-8 rounded bg-primary/10 animate-pulse" />
+                  <div className="h-8 w-8 rounded bg-primary/10 animate-pulse" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

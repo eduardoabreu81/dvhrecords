@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Play, Pause, SkipForward, SkipBack, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'sonner';
 import type { Artist, Track } from '@/hooks/useFirestoreArtists';
 
 interface SimplePlayerProps {
@@ -52,7 +53,10 @@ export default function SimplePlayer({
       
       const handleError = (e: ErrorEvent) => {
         console.error('Audio playback error:', e);
+        console.error('Failed to load audio from:', currentTrack.audioUrl);
+        console.error('Audio element:', audio);
         setIsReady(false);
+        toast.error(`Erro ao carregar áudio: ${currentTrack.title}`);
       };
 
       audio.addEventListener('loadedmetadata', handleLoadedMetadata);

@@ -6,13 +6,13 @@ import { useTranslation } from 'react-i18next';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import SimplePlayer from '@/components/SimplePlayer';
-import { useFirestoreArtists, type Artist, type Track } from '@/hooks/useFirestoreArtists';
+import { useFirestoreArtists, type Artist, type Track, type Release } from '@/hooks/useFirestoreArtists';
 
 export default function ArtistPage() {
   const { id } = useParams();
   const [, setLocation] = useLocation();
   const { t } = useTranslation();
-  const { artists, loading, error } = useFirestoreArtists();
+  const { artists, releases, loading, error } = useFirestoreArtists();
   const [artist, setArtist] = useState<Artist | null>(null);
   const [currentTrack, setCurrentTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -51,6 +51,12 @@ export default function ArtistPage() {
     setIsPlaying(true);
   };
 
+  const formatDuration = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -87,7 +93,7 @@ export default function ArtistPage() {
       <Header />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 px-4">
+      <section className="relative pt-32 pb-12 px-4">
         <div className="container mx-auto">
           <motion.button
             initial={{ opacity: 0, x: -20 }}
@@ -99,7 +105,7 @@ export default function ArtistPage() {
             {t('backToArtists', 'Back to Artists')}
           </motion.button>
 
-          <div className="flex flex-col md:flex-row gap-12 items-start">
+          <div className="flex flex-col md:flex-row gap-6 items-start">
             {/* Artist Image */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
@@ -109,7 +115,7 @@ export default function ArtistPage() {
               <img
                 src={artist.image}
                 alt={artist.name}
-                className="w-80 h-80 rounded-full object-cover border-4 border-primary/30 shadow-lg shadow-primary/20 glow-box-cyan"
+                className="w-48 h-48 md:w-64 md:h-64 rounded-full object-cover border-4 border-primary/30 shadow-lg shadow-primary/20 glow-box-cyan"
               />
             </motion.div>
 
@@ -120,75 +126,110 @@ export default function ArtistPage() {
               transition={{ delay: 0.2 }}
               className="flex-1"
             >
-              <h1 className="text-6xl font-bold text-primary glow-cyan mb-4">
+              <h1 className="text-4xl md:text-5xl font-bold text-primary glow-cyan mb-3">
                 {artist.name}
               </h1>
-              <p className="text-2xl text-muted-foreground mb-6">
+              <p className="text-xl text-muted-foreground mb-4">
                 {artist.genre}
               </p>
-              <p className="text-lg text-foreground/80 leading-relaxed mb-8">
+              <p className="text-base text-foreground/80 leading-relaxed mb-6">
                 {artist.bio}
               </p>
 
               {/* Social Links */}
               <div className="flex flex-wrap gap-4">
-                {artist.socialLinks.spotify && (
+                {artist.socialLinks && artist.socialLinks.length > 0 && artist.socialLinks.map((link, index) => (
                   <a
-                    href={artist.socialLinks.spotify}
+                    key={index}
+                    href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-3 bg-[#1DB954]/10 border border-[#1DB954]/30 rounded-lg hover:bg-[#1DB954]/20 transition-all text-[#1DB954] flex items-center gap-2"
+                    className="px-6 py-3 bg-primary/10 border border-primary/30 rounded-lg hover:bg-primary/20 transition-all text-primary flex items-center gap-2"
                   >
                     <ExternalLink className="w-5 h-5" />
-                    Spotify
+                    {link.name}
                   </a>
-                )}
-                {artist.socialLinks.soundcloud && (
-                  <a
-                    href={artist.socialLinks.soundcloud}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3 bg-[#FF5500]/10 border border-[#FF5500]/30 rounded-lg hover:bg-[#FF5500]/20 transition-all text-[#FF5500] flex items-center gap-2"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    SoundCloud
-                  </a>
-                )}
-                {artist.socialLinks.instagram && (
-                  <a
-                    href={artist.socialLinks.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3 bg-[#E1306C]/10 border border-[#E1306C]/30 rounded-lg hover:bg-[#E1306C]/20 transition-all text-[#E1306C] flex items-center gap-2"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    Instagram
-                  </a>
-                )}
-                {artist.socialLinks.appleMusic && (
-                  <a
-                    href={artist.socialLinks.appleMusic}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="px-6 py-3 bg-[#FA243C]/10 border border-[#FA243C]/30 rounded-lg hover:bg-[#FA243C]/20 transition-all text-[#FA243C] flex items-center gap-2"
-                  >
-                    <ExternalLink className="w-5 h-5" />
-                    Apple Music
-                  </a>
-                )}
+                ))}
               </div>
             </motion.div>
           </div>
         </div>
       </section>
 
+      {/* Releases Section */}
+      {releases.filter(r => r.artistId === id).length > 0 && (
+        <section className="py-12 px-4 border-t border-border/30">
+          <div className="container mx-auto">
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-3xl font-bold text-primary glow-cyan mb-6"
+            >
+              Releases
+            </motion.h2>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl">
+              {releases.filter(r => r.artistId === id).map((release, index) => (
+                <motion.div
+                  key={release.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="group bg-card/30 border-2 border-primary/30 rounded-lg overflow-hidden transition-all hover:border-primary hover:bg-card/50 glow-box-cyan"
+                >
+                  <img
+                    src={release.coverUrl}
+                    alt={release.title}
+                    className="w-full aspect-square object-cover border-b-2 border-primary/30 group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div className="p-4">
+                    <p className="font-semibold text-lg text-foreground group-hover:text-primary transition-colors truncate">
+                      {release.title}
+                    </p>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      {new Date(release.releaseDate).toLocaleDateString('pt-BR')}
+                    </p>
+                    {(release.links?.spotify || release.links?.appleMusic) && (
+                      <div className="flex flex-col gap-2">
+                        {release.links.spotify && (
+                          <a
+                            href={release.links.spotify}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm px-4 py-2 bg-primary/10 border border-primary/30 rounded hover:bg-primary/20 text-primary flex items-center justify-center gap-2 transition-all"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Spotify
+                          </a>
+                        )}
+                        {release.links.appleMusic && (
+                          <a
+                            href={release.links.appleMusic}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm px-4 py-2 bg-primary/10 border border-primary/30 rounded hover:bg-primary/20 text-primary flex items-center justify-center gap-2 transition-all"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                            Apple Music
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Tracks Section */}
-      <section className="py-20 px-4">
+      <section className="py-12 px-4 border-t border-border/30 pb-48">
         <div className="container mx-auto">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-bold text-primary glow-cyan mb-12"
+            className="text-3xl font-bold text-primary glow-cyan mb-6"
           >
             {t('tracks', 'Tracks')}
           </motion.h2>
@@ -201,7 +242,7 @@ export default function ArtistPage() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: index * 0.05 }}
                 onClick={() => handlePlayTrack(track)}
-                className={`group flex items-center gap-6 p-6 bg-card/30 border rounded-lg cursor-pointer transition-all ${
+                className={`group flex items-center gap-4 p-4 bg-card/30 border rounded-lg cursor-pointer transition-all ${
                   currentTrack?.id === track.id
                     ? 'border-primary bg-card/50'
                     : 'border-border hover:border-primary/50 hover:bg-card/40'
@@ -218,7 +259,7 @@ export default function ArtistPage() {
                     {track.title}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {track.duration}
+                    {typeof track.duration === 'number' ? formatDuration(track.duration) : track.duration}
                   </p>
                 </div>
 
@@ -230,6 +271,33 @@ export default function ArtistPage() {
             ))}
           </div>
         </div>
+
+        {/* Gallery Section */}
+        {artist.gallery && artist.gallery.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-3xl font-display text-primary glow-cyan mb-8">
+              Galeria
+            </h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {artist.gallery.map((imageUrl, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="aspect-square rounded-lg overflow-hidden border-2 border-primary/30 hover:border-primary cursor-pointer group"
+                >
+                  <img
+                    src={imageUrl}
+                    alt={`${artist.name} gallery ${index + 1}`}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Player Fixo */}

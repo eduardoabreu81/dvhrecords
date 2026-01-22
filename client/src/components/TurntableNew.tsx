@@ -87,50 +87,21 @@ export default function TurntableNew({ artist, onTrackChange }: TurntableNewProp
       </div>
 
       {/* Links Sociais */}
-      {Object.keys(artist.socialLinks).length > 0 && (
+      {artist.socialLinks && artist.socialLinks.length > 0 && (
         <div>
           <h4 className="text-lg font-semibold text-foreground mb-3">LINKS</h4>
           <div className="flex flex-wrap gap-3">
-            {artist.socialLinks.spotify && (
+            {artist.socialLinks.map((link, index) => (
               <a
-                href={artist.socialLinks.spotify}
+                key={index}
+                href={link.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-4 py-2 bg-card border border-primary/30 hover:border-primary rounded-lg text-sm font-medium text-foreground hover:text-primary transition-all glow-box-cyan"
               >
-                Spotify
+                {link.name}
               </a>
-            )}
-            {artist.socialLinks.soundcloud && (
-              <a
-                href={artist.socialLinks.soundcloud}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-card border border-primary/30 hover:border-primary rounded-lg text-sm font-medium text-foreground hover:text-primary transition-all glow-box-cyan"
-              >
-                SoundCloud
-              </a>
-            )}
-            {artist.socialLinks.appleMusic && (
-              <a
-                href={artist.socialLinks.appleMusic}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-card border border-primary/30 hover:border-primary rounded-lg text-sm font-medium text-foreground hover:text-primary transition-all glow-box-cyan"
-              >
-                Apple Music
-              </a>
-            )}
-            {artist.socialLinks.instagram && (
-              <a
-                href={artist.socialLinks.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-4 py-2 bg-card border border-primary/30 hover:border-primary rounded-lg text-sm font-medium text-foreground hover:text-primary transition-all glow-box-cyan"
-              >
-                Instagram
-              </a>
-            )}
+            ))}
           </div>
         </div>
       )}

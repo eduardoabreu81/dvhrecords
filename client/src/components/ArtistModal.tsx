@@ -3,11 +3,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Play, ExternalLink } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { useTranslation } from 'react-i18next';
-import { Artist, Track } from '../hooks/useFirestoreArtists';
+import { Artist, Track, Release } from '../hooks/useFirestoreArtists';
 import SimplePlayer from './SimplePlayer';
 
 interface ArtistModalProps {
   artist: Artist | null;
+  releases?: Release[];
   isOpen: boolean;
   onClose: () => void;
   currentTrack?: Track | null;
@@ -21,6 +22,7 @@ interface ArtistModalProps {
 
 export default function ArtistModal({ 
   artist, 
+  releases = [],
   isOpen, 
   onClose, 
   currentTrack,
@@ -90,25 +92,25 @@ export default function ArtistModal({
               </button>
 
               {/* Conteúdo scrollable com scroll discreto */}
-              <div className="overflow-y-auto flex-1 p-8 scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50">
+              <div className="overflow-y-auto flex-1 p-6 scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent hover:scrollbar-thumb-primary/50" style={{ maxHeight: 'calc(90vh - 120px)' }}>
                 {/* Header com foto e nome */}
-                <div className="flex flex-col md:flex-row gap-6 mb-8">
+                <div className="flex flex-col md:flex-row gap-4 mb-6">
                   {/* Foto do artista */}
                   <div className="flex-shrink-0">
                     <img
                       src={artist.image}
                       alt={artist.name}
-                      className="w-48 h-48 rounded-full object-cover border-4 border-primary/30 shadow-lg shadow-primary/20"
+                      className="w-32 h-32 md:w-40 md:h-40 rounded-full object-cover border-4 border-primary/30 shadow-lg shadow-primary/20"
                     />
                   </div>
 
                   {/* Info do artista */}
                   <div className="flex-1">
-                    <h2 className="text-4xl font-display text-primary glow-cyan mb-2">
+                    <h2 className="text-3xl font-display text-primary glow-cyan mb-2">
                       {artist.name}
                     </h2>
-                    <p className="text-sm text-muted-foreground mb-4">{artist.genre}</p>
-                    <p className="text-foreground leading-relaxed mb-4">{artist.bio}</p>
+                    <p className="text-sm text-muted-foreground mb-3">{artist.genre}</p>
+                    <p className="text-sm text-foreground leading-relaxed mb-3">{artist.bio}</p>
                     
                     {/* Botão Ver Perfil Completo */}
                     <button
@@ -125,11 +127,73 @@ export default function ArtistModal({
                 </div>
 
                 {/* Divider */}
-                <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent mb-6" />
+                <div className="h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent mb-4" />
+
+                {/* Lista de Releases */}
+                {releases.filter(r => r.artistId === artist.id).length > 0 && (
+                  <div className="mb-6">
+                    <h3 className="text-xl font-display text-primary glow-cyan mb-3">
+                      Releases
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      {releases.filter(r => r.artistId === artist.id).map((release, index) => (
+                        <motion.div
+                          key={release.id}
+                          initial={{ opacity: 0, scale: 0.9 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: index * 0.05 }}
+                          className="group bg-card/30 border border-border hover:border-primary/50 rounded-lg overflow-hidden transition-all hover:bg-card/50"
+                        >
+                          <img
+                            src={release.coverUrl}
+                            alt={release.title}
+                            className="w-full aspect-square object-cover"
+                          />
+                          <div className="p-3">
+                            <p className="font-medium text-foreground truncate text-sm">
+                              {release.title}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(release.releaseDate).toLocaleDateString('pt-BR')}
+                            </p>
+                            {(release.links?.spotify || release.links?.appleMusic) && (
+                              <div className="flex gap-2 mt-2">
+                                {release.links.spotify && (
+                                  <a
+                                    href={release.links.spotify}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <ExternalLink className="w-3 h-3" />
+                                    Spotify
+                                  </a>
+                                )}
+                                {release.links.appleMusic && (
+                                  <a
+                                    href={release.links.appleMusic}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-primary hover:underline flex items-center gap-1"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <ExternalLink className="w-3 h-3" />
+                                    Apple
+                                  </a>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Lista de Tracks */}
                 <div>
-                  <h3 className="text-2xl font-display text-primary glow-cyan mb-4">
+                  <h3 className="text-xl font-display text-primary glow-cyan mb-3">
                     Tracks
                   </h3>
                   <div className="space-y-2">
@@ -140,7 +204,7 @@ export default function ArtistModal({
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
                         onClick={() => handlePlayTrack(track)}
-                        className="group flex items-center gap-4 p-4 bg-card/30 border border-border hover:border-primary/50 rounded-lg cursor-pointer transition-all hover:bg-card/50"
+                        className="group flex items-center gap-3 p-3 bg-card/30 border border-border hover:border-primary/50 rounded-lg cursor-pointer transition-all hover:bg-card/50"
                       >
                         {/* Botão Play */}
                         <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 border border-primary/30 group-hover:bg-primary/20 group-hover:border-primary flex items-center justify-center transition-all">

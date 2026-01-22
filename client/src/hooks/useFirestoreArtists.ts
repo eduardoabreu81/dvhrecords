@@ -6,25 +6,30 @@ export interface Track {
   id: string;
   title: string;
   duration: number;
-  artistId?: string;
+  artistId?: string; // Deprecated: mantido para compatibilidade
+  artistIds?: string[]; // Novo: suporta múltiplos artistas
   releaseDate?: string;
   audioUrl?: string;
+  tag?: 'unreleased' | 'tbd' | 'dubplate' | 'exclusive' | 'premiere' | null;
+}
+
+export interface SocialLink {
+  name: string; // e.g., "Instagram", "SoundCloud", "Beatport", etc.
+  url: string;
 }
 
 export interface Artist {
   id: string;
   name: string;
   bio: string;
+  bioEn?: string; // Bio in English
+  bioEs?: string; // Bio in Spanish
   genre: string;
-  image: string; // Renomeado de imageUrl para image
+  image: string; // Profile image
   imageUrl?: string; // Manter compatibilidade
   country: string;
-  socialLinks: {
-    spotify?: string;
-    soundcloud?: string;
-    instagram?: string;
-    appleMusic?: string;
-  };
+  socialLinks: SocialLink[]; // Dynamic unlimited social links
+  gallery?: string[]; // Gallery images (up to 15)
   tracks: Track[]; // Tracks aninhadas
 }
 
@@ -67,10 +72,8 @@ export function useFirestoreArtists() {
           ...doc.data()
         }));
         
-        // Buscar tracks
-        const tracksSnapshot = await getDocs(
-          query(collection(db, 'tracks'), orderBy('releaseDate', 'desc'))
-        );
+        // Buscar tracks (sem orderBy para pegar todas, independente dos campos)
+        const tracksSnapshot = await getDocs(collection(db, 'tracks'));
         const tracksData = tracksSnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
@@ -87,14 +90,18 @@ export function useFirestoreArtists() {
         
         // Otimização: Criar maps para lookups O(1) em vez de filter/find O(n)
         
-        // Map de tracks por artistId - O(n)
+        // Map de tracks por artistId - O(n) - suporta artistId (antigo) e artistIds (novo)
         const tracksByArtist = tracksData.reduce((acc, track) => {
-          if (track.artistId) {
-            if (!acc[track.artistId]) {
-              acc[track.artistId] = [];
+          // Suportar tanto artistIds (novo) quanto artistId (antigo)
+          const artistIds = track.artistIds || (track.artistId ? [track.artistId] : []);
+          
+          artistIds.forEach(artistId => {
+            if (!acc[artistId]) {
+              acc[artistId] = [];
             }
-            acc[track.artistId].push(track);
-          }
+            acc[artistId].push(track);
+          });
+          
           return acc;
         }, {} as Record<string, Track[]>);
         
