@@ -370,6 +370,21 @@ i18n
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],
+      // Função para converter o idioma detectado
+      lookupLocalStorage: 'i18nextLng',
+      lookupNavigator: true,
+      convertDetectedLanguage: (lng: string) => {
+        // Extrair código do idioma (pt-BR -> pt, en-US -> en)
+        const langCode = lng.split('-')[0].toLowerCase();
+        
+        // Se for português ou espanhol, usar o idioma
+        if (langCode === 'pt' || langCode === 'es') {
+          return langCode;
+        }
+        
+        // Para qualquer outro idioma, usar inglês
+        return 'en';
+      },
     },
   });
 
