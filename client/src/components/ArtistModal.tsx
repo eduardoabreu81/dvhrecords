@@ -36,6 +36,14 @@ export default function ArtistModal({
   const { t } = useTranslation();
   const [, setLocation] = useLocation();
 
+  // Formatar duração de segundos para mm:ss
+  const formatDuration = (duration: number | string) => {
+    if (typeof duration === 'string') return duration;
+    const mins = Math.floor(duration / 60);
+    const secs = duration % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   // Fechar modal com ESC
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
@@ -217,7 +225,7 @@ export default function ArtistModal({
                             {track.title}
                           </p>
                           <p className="text-xs text-muted-foreground">
-                            {track.duration}
+                            {formatDuration(track.duration)}
                           </p>
                         </div>
                       </motion.div>
@@ -237,6 +245,7 @@ export default function ArtistModal({
                     onPause={onPause || (() => {})}
                     onNext={onNext || (() => {})}
                     onPrevious={onPrevious || (() => {})}
+                    isInline={true}
                   />
                 </div>
               )}

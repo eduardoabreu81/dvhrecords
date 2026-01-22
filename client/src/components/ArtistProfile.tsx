@@ -9,6 +9,14 @@ interface ArtistProfileProps {
 export default function ArtistProfile({ artist }: ArtistProfileProps) {
   if (!artist) return null;
 
+  // Formatar duração de segundos para mm:ss
+  const formatDuration = (duration: number | string) => {
+    if (typeof duration === 'string') return duration;
+    const mins = Math.floor(duration / 60);
+    const secs = duration % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   const socialIcons = {
     spotify: (
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -79,7 +87,7 @@ export default function ArtistProfile({ artist }: ArtistProfileProps) {
                 className="flex items-center justify-between p-3 rounded bg-background/30 hover:bg-background/50 transition-colors"
               >
                 <span className="text-sm text-foreground">{track.title}</span>
-                <span className="text-xs text-foreground/50 font-mono">{track.duration}</span>
+                <span className="text-xs text-foreground/50 font-mono">{formatDuration(track.duration)}</span>
               </div>
             ))}
           </div>

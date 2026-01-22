@@ -12,6 +12,7 @@ interface SimplePlayerProps {
   onPause: () => void;
   onNext: () => void;
   onPrevious: () => void;
+  isInline?: boolean; // Se true, não usa position fixed
 }
 
 export default function SimplePlayer({
@@ -22,6 +23,7 @@ export default function SimplePlayer({
   onPause,
   onNext,
   onPrevious,
+  isInline = false,
 }: SimplePlayerProps) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [volume, setVolume] = useState(70);
@@ -145,7 +147,11 @@ export default function SimplePlayer({
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 100, opacity: 0 }}
-        className="fixed bottom-16 left-0 right-0 z-40 bg-black/90 backdrop-blur-md border-t border-primary/30"
+        className={`bg-black/90 backdrop-blur-md ${
+          isInline 
+            ? '' 
+            : 'fixed bottom-16 left-0 right-0 z-40 border-t border-primary/30'
+        }`}
       >
         <div className="container max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center gap-4">
@@ -153,7 +159,7 @@ export default function SimplePlayer({
             <motion.div
               animate={{ rotate: isPlaying ? 360 : 0 }}
               transition={{ duration: 3, repeat: isPlaying ? Infinity : 0, ease: 'linear' }}
-              className="w-14 h-14 rounded overflow-hidden border border-primary/30 flex-shrink-0"
+              className="w-14 h-14 rounded-full overflow-hidden border-2 border-primary/30 flex-shrink-0"
             >
               <img
                 src={artist.image}
