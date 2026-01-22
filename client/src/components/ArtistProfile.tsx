@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, Music } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Artist } from '@/hooks/useFirestoreArtists';
 
 interface ArtistProfileProps {
@@ -7,6 +8,7 @@ interface ArtistProfileProps {
 }
 
 export default function ArtistProfile({ artist }: ArtistProfileProps) {
+  const { t } = useTranslation();
   if (!artist) return null;
 
   // Formatar duração de segundos para mm:ss
@@ -69,7 +71,7 @@ export default function ArtistProfile({ artist }: ArtistProfileProps) {
         {/* Bio */}
         <div className="mb-6">
           <h3 className="text-sm font-display text-primary/70 mb-2 uppercase tracking-wider">
-            Bio
+            {t('artistProfile.bio')}
           </h3>
           <p className="text-foreground/90 leading-relaxed">{artist.bio}</p>
         </div>
@@ -78,7 +80,7 @@ export default function ArtistProfile({ artist }: ArtistProfileProps) {
         <div className="mb-6">
           <h3 className="text-sm font-display text-primary/70 mb-3 uppercase tracking-wider flex items-center gap-2">
             <Music className="w-4 h-4" />
-            Tracks
+            {t('artistProfile.tracks')}
           </h3>
           <div className="space-y-2">
             {artist.tracks.map((track) => (
@@ -97,7 +99,7 @@ export default function ArtistProfile({ artist }: ArtistProfileProps) {
         <div>
           <h3 className="text-sm font-display text-primary/70 mb-3 uppercase tracking-wider flex items-center gap-2">
             <ExternalLink className="w-4 h-4" />
-            Links
+            {t('artistProfile.socialLinks')}
           </h3>
           <div className="flex flex-wrap gap-3">
             {artist.socialLinks.spotify && (

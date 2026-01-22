@@ -1,6 +1,9 @@
 import { motion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { SOCIAL_LINKS } from '@/config/socialLinks';
 
 export default function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -14,7 +17,7 @@ export default function Footer() {
             viewport={{ once: true }}
             className="text-foreground/70 text-sm"
           >
-            © {currentYear} DVH Records. All rights reserved.
+            {t('footer.copyright', { year: currentYear })}
           </motion.div>
 
           {/* LocalBiz Academy Credit */}
@@ -25,7 +28,7 @@ export default function Footer() {
             transition={{ delay: 0.1 }}
             className="text-sm"
           >
-            <span className="text-foreground/50">Feito por </span>
+            <span className="text-foreground/50">{t('footer.madeBy')} </span>
             <a
               href="https://localbizacademy.com"
               target="_blank"
@@ -36,7 +39,7 @@ export default function Footer() {
             </a>
           </motion.div>
 
-          {/* Social Links (opcional) */}
+          {/* Social Links */}
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -44,9 +47,9 @@ export default function Footer() {
             transition={{ delay: 0.2 }}
             className="flex items-center gap-4"
           >
-            <span className="text-foreground/50 text-sm">Siga-nos:</span>
+            <span className="text-foreground/50 text-sm">{t('footer.followUs')}</span>
             <a
-              href="https://instagram.com/dvhrecords"
+              href={SOCIAL_LINKS.instagram}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary/70 hover:text-primary transition-colors"
@@ -57,7 +60,7 @@ export default function Footer() {
               </svg>
             </a>
             <a
-              href="https://soundcloud.com/dvhrecords"
+              href={SOCIAL_LINKS.soundcloud}
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary/70 hover:text-primary transition-colors"

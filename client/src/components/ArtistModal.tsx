@@ -129,7 +129,7 @@ export default function ArtistModal({
                       className="px-6 py-2 bg-primary/10 border border-primary/30 rounded-lg hover:bg-primary/20 hover:border-primary transition-all text-primary flex items-center gap-2"
                     >
                       <ExternalLink className="w-4 h-4" />
-                      {t('viewFullProfile', 'Ver Perfil Completo')}
+                      {t('artistProfile.viewFullProfile')}
                     </button>
                   </div>
                 </div>
@@ -141,7 +141,7 @@ export default function ArtistModal({
                 {releases.filter(r => r.artistId === artist.id).length > 0 && (
                   <div className="mb-6">
                     <h3 className="text-xl font-display text-primary glow-cyan mb-3">
-                      Releases
+                      {t('artistProfile.releases')}
                     </h3>
                     <div className="grid grid-cols-2 gap-4">
                       {releases.filter(r => r.artistId === artist.id).map((release, index) => (
@@ -202,7 +202,7 @@ export default function ArtistModal({
                 {/* Lista de Tracks */}
                 <div>
                   <h3 className="text-xl font-display text-primary glow-cyan mb-3">
-                    Tracks
+                    {t('artistProfile.tracks')}
                   </h3>
                   <div className="space-y-2">
                     {artist.tracks.map((track, index) => (

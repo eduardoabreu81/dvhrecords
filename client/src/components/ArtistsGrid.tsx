@@ -18,7 +18,7 @@ export default function ArtistsGrid({ artists, selectedArtist, onSelectArtist }:
   };
   
   return (
-    <div className="py-12">
+    <div className="py-12 pt-32">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

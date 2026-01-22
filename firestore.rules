@@ -20,6 +20,18 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
     
+    // About: leitura pública, escrita apenas autenticados
+    match /about/{aboutId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Settings (inclui about): leitura pública, escrita apenas autenticados
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
     // Submissions (demos enviados): leitura/escrita apenas autenticados
     match /submissions/{submissionId} {
       allow read, write: if request.auth != null;

@@ -33,10 +33,12 @@ const resources = {
       },
       // Artist Profile
       artistProfile: {
-        bio: 'Biografia',
+        bio: 'Bio',
         tracks: 'Tracks',
-        socialLinks: 'Links Sociais',
+        socialLinks: 'Links',
         duration: 'Duração',
+        viewFullProfile: 'Ver Perfil Completo',
+        releases: 'Releases',
       },
       // Audio Player
       audioPlayer: {
@@ -150,10 +152,12 @@ const resources = {
       },
       // Artist Profile
       artistProfile: {
-        bio: 'Biography',
+        bio: 'Bio',
         tracks: 'Tracks',
-        socialLinks: 'Social Links',
+        socialLinks: 'Links',
         duration: 'Duration',
+        viewFullProfile: 'View Full Profile',
+        releases: 'Releases',
       },
       // Audio Player
       audioPlayer: {
@@ -267,10 +271,12 @@ const resources = {
       },
       // Artist Profile
       artistProfile: {
-        bio: 'Biografía',
-        tracks: 'Pistas',
-        socialLinks: 'Enlaces Sociales',
+        bio: 'Bio',
+        tracks: 'Tracks',
+        socialLinks: 'Enlaces',
         duration: 'Duración',
+        viewFullProfile: 'Ver Perfil Completo',
+        releases: 'Lanzamientos',
       },
       // Audio Player
       audioPlayer: {

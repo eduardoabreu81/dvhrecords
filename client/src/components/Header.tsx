@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
+  const { t } = useTranslation();
   const [menuOpen, setMenuOpen] = useState(false);
 
   const menuItems = [
-    { label: 'Home', href: '#home' },
-    { label: 'Releases', href: '#releases' },
-    { label: 'Artists', href: '#artists' },
-    { label: 'About', href: '#about' },
-    { label: 'Submit Demo', href: '#submit' },
+    { label: t('menu.home'), href: '#home' },
+    { label: t('releases.title'), href: '#releases' },
+    { label: t('menu.artists'), href: '#artists' },
+    { label: t('menu.about'), href: '#about' },
+    { label: t('menu.submit'), href: '#submit' },
   ];
 
   return (
