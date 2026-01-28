@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { collection, getDocs, query, orderBy } from 'firebase/firestore';
+import { collection, getDocs, query, orderBy, onSnapshot } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 
 export interface Track {
@@ -53,94 +53,101 @@ export function useFirestoreArtists() {
   const [releases, setReleases] = useState<Release[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // Expor função de refresh para forçar recarga
+  const refresh = () => setRefreshKey(prev => prev + 1);
 
   useEffect(() => {
-    async function fetchData() {
-      if (!db) {
-        setError('Firebase not initialized');
-        setLoading(false);
-        return;
-      }
-      
-      try {
-        setLoading(true);
-        
-        // Buscar artistas
-        const artistsSnapshot = await getDocs(collection(db, 'artists'));
-        const artistsRaw = artistsSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-        
-        // Buscar tracks (sem orderBy para pegar todas, independente dos campos)
-        const tracksSnapshot = await getDocs(collection(db, 'tracks'));
-        const tracksData = tracksSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })) as Track[];
-        
-        // Buscar releases
-        const releasesSnapshot = await getDocs(
-          query(collection(db, 'releases'), orderBy('releaseDate', 'desc'))
-        );
-        const releasesData = releasesSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        })) as Release[];
-        
-        // Otimização: Criar maps para lookups O(1) em vez de filter/find O(n)
-        
-        // Map de tracks por artistId - O(n) - suporta artistId (antigo) e artistIds (novo)
-        const tracksByArtist = tracksData.reduce((acc, track) => {
-          // Suportar tanto artistIds (novo) quanto artistId (antigo)
-          const artistIds = track.artistIds || (track.artistId ? [track.artistId] : []);
-          
-          artistIds.forEach(artistId => {
-            if (!acc[artistId]) {
-              acc[artistId] = [];
-            }
-            acc[artistId].push(track);
-          });
-          
-          return acc;
-        }, {} as Record<string, Track[]>);
-        
-        // Map de artistas por ID - O(n)
-        const artistsById = artistsRaw.reduce((acc, artist: any) => {
-          acc[artist.id] = artist;
-          return acc;
-        }, {} as Record<string, any>);
-        
-        // Aninhar tracks nos artistas com lookup O(1) - total O(n)
-        const artistsData = artistsRaw.map((artist: any) => ({
-          ...artist,
-          image: artist.imageUrl || artist.image || '',
-          tracks: tracksByArtist[artist.id] || []
-        })) as Artist[];
-        
-        // Enriquecer releases com artistName usando lookup O(1) - total O(n)
-        const enrichedReleases = releasesData.map(release => {
-          const artist = artistsById[release.artistId];
-          return {
-            ...release,
-            artistName: artist?.name || 'Unknown Artist'
-          };
-        });
-        
-        setArtists(artistsData);
-        setTracks(tracksData);
-        setReleases(enrichedReleases);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching Firestore data:', err);
-        setError('Failed to load data from database');
-      } finally {
-        setLoading(false);
-      }
+    if (!db) {
+      setError('Firebase not initialized');
+      setLoading(false);
+      return;
     }
 
-    fetchData();
-  }, []);
+    setLoading(true);
 
-  return { artists, tracks, releases, loading, error };
+    // Listener em tempo real para artistas - atualiza automaticamente
+    const unsubscribe = onSnapshot(
+      collection(db, 'artists'),
+      async (artistsSnapshot) => {
+        try {
+          const artistsRaw = artistsSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          }));
+
+          // Buscar tracks e releases
+          const [tracksSnapshot, releasesSnapshot] = await Promise.all([
+            getDocs(collection(db, 'tracks')),
+            getDocs(query(collection(db, 'releases'), orderBy('releaseDate', 'desc')))
+          ]);
+
+          const tracksData = tracksSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          })) as Track[];
+          
+          const releasesData = releasesSnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+          })) as Release[];
+
+          // Map de tracks por artistId
+          const tracksByArtist = tracksData.reduce((acc, track) => {
+            const artistIds = track.artistIds || (track.artistId ? [track.artistId] : []);
+            artistIds.forEach(artistId => {
+              if (!acc[artistId]) {
+                acc[artistId] = [];
+              }
+              acc[artistId].push(track);
+            });
+            return acc;
+          }, {} as Record<string, Track[]>);
+
+          // Map de artistas por ID
+          const artistsById = artistsRaw.reduce((acc, artist: any) => {
+            acc[artist.id] = artist;
+            return acc;
+          }, {} as Record<string, any>);
+
+          // Enriquecer artistas com tracks
+          const artistsData = artistsRaw.map((artist: any) => ({
+            ...artist,
+            image: artist.imageUrl || artist.image || '',
+            tracks: tracksByArtist[artist.id] || []
+          })) as Artist[];
+
+          // Enriquecer releases com artistName
+          const enrichedReleases = releasesData.map(release => {
+            const artist = artistsById[release.artistId];
+            return {
+              ...release,
+              artistName: artist?.name || 'Unknown Artist'
+            };
+          });
+
+          setArtists(artistsData);
+          setTracks(tracksData);
+          setReleases(enrichedReleases);
+          setError(null);
+          setLoading(false);
+        } catch (err) {
+          console.error('Error processing Firestore data:', err);
+          setError('Failed to process data');
+          setLoading(false);
+        }
+      },
+      (err) => {
+        console.error('Error listening to Firestore:', err);
+        setError('Failed to load data from database');
+        setLoading(false);
+      }
+    );
+
+    // Cleanup: desinscrever do listener quando o componente desmontar
+    return () => unsubscribe();
+  }, [refreshKey]); // Re-executar quando refreshKey mudar
+
+  return { artists, tracks, releases, loading, error, refresh };
 }
