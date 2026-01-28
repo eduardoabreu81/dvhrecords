@@ -67,8 +67,6 @@ try {
 export function isFirebaseReady(): boolean {
   return !!(app && db && auth && storage) && !initError;
 }
-) && !initError;
-}
 
 // Helper to get initialization error
 export function getFirebaseError(): Error | null {
