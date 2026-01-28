@@ -112,11 +112,15 @@ export function useFirestoreArtists() {
           }, {} as Record<string, any>);
 
           // Enriquecer artistas com tracks
-          const artistsData = artistsRaw.map((artist: any) => ({
-            ...artist,
-            image: artist.imageUrl || artist.image || '',
-            tracks: tracksByArtist[artist.id] || []
-          })) as Artist[];
+          const artistsData = artistsRaw.map((artist: any) => {
+            const imageUrl = artist.image || artist.imageUrl || '';
+            console.log(`Artist ${artist.name}: image field =`, artist.image, 'imageUrl field =', artist.imageUrl);
+            return {
+              ...artist,
+              image: imageUrl,
+              tracks: tracksByArtist[artist.id] || []
+            };
+          }) as Artist[];
 
           // Enriquecer releases com artistName
           const enrichedReleases = releasesData.map(release => {

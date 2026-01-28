@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Upload, Loader2, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -33,6 +33,32 @@ export default function AddArtistDialog({ isOpen, onClose, onSuccess, editingArt
   
   const imageInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
+
+  // Atualizar campos quando editingArtist mudar
+  useEffect(() => {
+    if (editingArtist) {
+      setName(editingArtist.name || '');
+      setGenre(editingArtist.genre || '');
+      setBio(editingArtist.bio || '');
+      setBioEn(editingArtist.bioEn || '');
+      setBioEs(editingArtist.bioEs || '');
+      setCountry(editingArtist.country || '');
+      setSocialLinks(editingArtist.socialLinks || []);
+      setImagePreview(editingArtist.image || null);
+      setGalleryPreviews(editingArtist.gallery || []);
+    } else {
+      // Limpar campos ao criar novo artista
+      setName('');
+      setGenre('');
+      setBio('');
+      setBioEn('');
+      setBioEs('');
+      setCountry('');
+      setSocialLinks([]);
+      setImagePreview(null);
+      setGalleryPreviews([]);
+    }
+  }, [editingArtist]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
