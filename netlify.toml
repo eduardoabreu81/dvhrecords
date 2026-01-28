@@ -8,6 +8,10 @@
   # Diretório de output do build
   publish = "dist"
 
+[functions]
+  # Diretório das Netlify Functions (relativo à raiz do repo)
+  directory = "../netlify/functions"
+
 # Configurações de redirecionamento para SPA (Single Page Application)
 [[redirects]]
   from = "/*"
