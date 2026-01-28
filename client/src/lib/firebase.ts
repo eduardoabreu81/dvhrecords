@@ -65,7 +65,7 @@ try {
 
 // Helper to check if Firebase is ready
 export function isFirebaseReady(): boolean {
-  return !!(app && db && auth && storage) && !initError;
+  return !!(app && db && auth) && !initError;
 }
 
 // Helper to get initialization error
@@ -73,4 +73,4 @@ export function getFirebaseError(): Error | null {
   return initError;
 }
 
-export { app, db, auth
+export { app, db, auth };
