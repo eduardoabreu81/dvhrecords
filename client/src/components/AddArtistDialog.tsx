@@ -181,15 +181,15 @@ export default function AddArtistDialog({ isOpen, onClose, onSuccess, editingArt
       setBioEn('');
       setBioEs('');
       setCountry('');
-      setInstagram('');
-      setSoundcloud('');
       setSocialLinks([]);
       setImageFile(null);
       setGalleryFiles([]);
       setImagePreview(null);
       setGalleryPreviews([]);
       if (imageInputRef.current) imageInputRef.current.value = '';
-      if (galleryInputRef.current) gallery
+      if (galleryInputRef.current) galleryInputRef.current.value = '';
+      
+      onSuccess();
       onClose();
     } catch (error) {
       console.error('Error saving artist:', error);
