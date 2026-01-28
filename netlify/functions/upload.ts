@@ -1,8 +1,8 @@
 import { Handler } from '@netlify/functions';
 
-const B2_KEY_ID = process.env.VITE_B2_KEY_ID;
-const B2_APPLICATION_KEY = process.env.VITE_B2_APPLICATION_KEY;
-const B2_BUCKET_NAME = process.env.VITE_B2_BUCKET_NAME;
+const B2_KEY_ID = process.env.B2_KEY_ID || process.env.VITE_B2_KEY_ID;
+const B2_APPLICATION_KEY = process.env.B2_APPLICATION_KEY || process.env.VITE_B2_APPLICATION_KEY;
+const B2_BUCKET_NAME = process.env.B2_BUCKET_NAME || process.env.VITE_B2_BUCKET_NAME;
 
 export const handler: Handler = async (event) => {
   // CORS headers
