@@ -45,27 +45,62 @@ export const handler: Handler = async (event) => {
     });
 
     if (!authResponse.ok) {
+      const errorText = await authResponse.text();
+      console.error('B2 auth error:', errorText);
       throw new Error('B2 authorization failed');
     }
 
     const authData = await authResponse.json();
 
-    // 2. Get upload URL
+    // 2. Get bucket ID by name
+    let bucketId = authData.allowed?.bucketId;
+    
+    if (!bucketId) {
+      const bucketsResponse = await fetch(`${authData.apiUrl}/b2api/v2/b2_list_buckets`, {
+        method: 'POST',
+        headers: {
+          Authorization: authData.authorizationToken,
+        },
+        body: JSON.stringify({ 
+          accountId: authData.accountId,
+          bucketName: B2_BUCKET_NAME,
+        }),
+      });
+
+      if (!bucketsResponse.ok) {
+        const errorText = await bucketsResponse.text();
+        console.error('B2 list buckets error:', errorText);
+        throw new Error('Failed to list buckets');
+      }
+
+      const bucketsData = await bucketsResponse.json();
+      const bucket = bucketsData.buckets?.find((b: any) => b.bucketName === B2_BUCKET_NAME);
+      
+      if (!bucket) {
+        throw new Error(`Bucket ${B2_BUCKET_NAME} not found`);
+      }
+      
+      bucketId = bucket.bucketId;
+    }
+
+    // 3. Get upload URL
     const uploadUrlResponse = await fetch(`${authData.apiUrl}/b2api/v2/b2_get_upload_url`, {
       method: 'POST',
       headers: {
         Authorization: authData.authorizationToken,
       },
-      body: JSON.stringify({ bucketId: authData.allowed.bucketId }),
+      body: JSON.stringify({ bucketId }),
     });
 
     if (!uploadUrlResponse.ok) {
+      const errorText = await uploadUrlResponse.text();
+      console.error('B2 get upload URL error:', errorText);
       throw new Error('Failed to get upload URL');
     }
 
     const uploadUrlData = await uploadUrlResponse.json();
 
-    // 3. Upload file
+    // 4. Upload file
     const fileBuffer = Buffer.from(fileBase64, 'base64');
     const filePath = `${folder}/${Date.now()}-${fileName}`;
 
