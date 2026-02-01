@@ -102,7 +102,13 @@ export const handler: Handler = async (event) => {
 
     // 4. Upload file
     const fileBuffer = Buffer.from(fileBase64, 'base64');
-    const filePath = `${folder}/${Date.now()}-${fileName}`;
+    
+    // Sanitizar nome do arquivo: remover espaços e caracteres especiais
+    const sanitizedFileName = fileName
+      .replace(/\s+/g, '_')  // Substituir espaços por underscore
+      .replace(/[^a-zA-Z0-9._-]/g, '');  // Remover caracteres especiais
+    
+    const filePath = `${folder}/${Date.now()}-${sanitizedFileName}`;
 
     const uploadResponse = await fetch(uploadUrlData.uploadUrl, {
       method: 'POST',
