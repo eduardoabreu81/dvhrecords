@@ -89,11 +89,19 @@
   * {
     @apply border-border outline-ring/50;
   }
+  
+  html {
+    overflow-x: hidden;
+    width: 100%;
+  }
+  
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body), sans-serif;
     position: relative;
     overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
   }
   
   /* Background global com imagem de música eletrônica */
@@ -230,5 +238,19 @@
   .scrollbar-thin {
     scrollbar-width: thin;
     scrollbar-color: rgba(0, 240, 255, 0.3) transparent;
+  }
+}
+/* Melhorias adicionais para mobile */
+section {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Melhorar touch targets em mobile */
+@media (max-width: 768px) {
+  button:not(.min-h-0),
+  a[href]:not(.min-h-0),
+  [role="button"]:not(.min-h-0) {
+    min-height: 44px;
   }
 }

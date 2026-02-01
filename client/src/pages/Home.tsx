@@ -87,7 +87,7 @@ export default function Home() {
         {/* Overlay escuro para melhor legibilidade */}
         <div className="absolute inset-0 bg-black/70" />
         
-        <div className="container relative z-10 py-12">
+        <div className="container relative z-10 py-8 sm:py-10 md:py-12">
           <motion.div style={{ y: artistsY }}>
             {/* Grid de artistas sempre visível */}
             {loading ? (

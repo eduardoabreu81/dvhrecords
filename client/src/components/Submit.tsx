@@ -39,7 +39,7 @@ export default function Submit() {
   return (
     <section 
       id="submit" 
-      className="min-h-screen bg-background flex items-center justify-center py-20 px-4 relative"
+      className="min-h-screen bg-background flex items-center justify-center py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative"
       style={{
         backgroundImage: 'url(https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1920)',
         backgroundSize: 'cover',
@@ -54,7 +54,7 @@ export default function Submit() {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-5xl md:text-6xl font-display text-center text-primary glow-cyan-strong mb-6"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display text-center text-primary glow-cyan-strong mb-4 sm:mb-6"
         >
           {t('submit.title')}
         </motion.h2>
@@ -64,7 +64,7 @@ export default function Submit() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.1 }}
-          className="text-center text-foreground/70 mb-12 text-lg"
+          className="text-center text-foreground/70 mb-8 sm:mb-10 md:mb-12 text-base sm:text-lg"
         >
           {t('submit.subtitle')}
         </motion.p>
@@ -74,7 +74,7 @@ export default function Submit() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="bg-card/80 backdrop-blur-sm border-2 border-primary/30 rounded-lg p-8 glow-box-cyan"
+          className="bg-card/80 backdrop-blur-sm border-2 border-primary/30 rounded-lg p-4 sm:p-6 md:p-8 glow-box-cyan"
         >
           {success ? (
             <div className="text-center py-12">
@@ -89,8 +89,8 @@ export default function Submit() {
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                 <div>
                   <label className="block text-sm font-display text-primary/70 mb-2">
                     {t('submit.form.artistName')} {t('submit.form.required')}

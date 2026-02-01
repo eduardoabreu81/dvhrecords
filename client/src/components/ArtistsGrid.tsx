@@ -18,16 +18,16 @@ export default function ArtistsGrid({ artists, selectedArtist, onSelectArtist }:
   };
   
   return (
-    <div className="py-12 pt-32">
+    <div className="py-8 sm:py-10 md:py-12 pt-24 sm:pt-28 md:pt-32">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-4xl md:text-5xl font-display text-primary glow-cyan mb-12 text-center"
+        className="text-3xl sm:text-4xl md:text-5xl font-display text-primary glow-cyan mb-8 sm:mb-10 md:mb-12 text-center px-4"
       >
         {t('artists.title')}
       </motion.h2>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 max-w-6xl mx-auto px-3 sm:px-4">
         {artists.map((artist, index) => (
           <motion.div
             key={artist.id}
@@ -63,8 +63,8 @@ export default function ArtistsGrid({ artists, selectedArtist, onSelectArtist }:
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               
               {/* Nome sobreposto (aparece no hover) */}
-              <div className="absolute inset-0 flex items-end justify-center p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                <p className="text-primary font-display text-lg glow-cyan">
+              <div className="absolute inset-0 flex items-end justify-center p-2 sm:p-3 md:p-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                <p className="text-primary font-display text-sm sm:text-base md:text-lg glow-cyan">
                   {artist.name}
                 </p>
               </div>
@@ -72,14 +72,14 @@ export default function ArtistsGrid({ artists, selectedArtist, onSelectArtist }:
             
             {/* Nome abaixo da foto (sempre visível) */}
             <div className="text-center">
-              <h3 className={`font-display text-lg transition-colors ${
+              <h3 className={`font-display text-sm sm:text-base md:text-lg transition-colors ${
                 selectedArtist?.id === artist.id 
                   ? 'text-primary glow-cyan' 
                   : 'text-foreground group-hover:text-primary'
               }`}>
                 {artist.name}
               </h3>
-              <p className="text-xs text-muted-foreground mt-1">{artist.genre}</p>
+              <p className="text-xs text-muted-foreground mt-0.5 sm:mt-1">{artist.genre}</p>
             </div>
           </motion.div>
         ))}

@@ -70,7 +70,7 @@ export default function About() {
   return (
     <section 
       id="about" 
-      className="min-h-screen bg-background flex items-center justify-center py-20 px-4 relative"
+      className="min-h-screen bg-background flex items-center justify-center py-12 sm:py-16 md:py-20 px-3 sm:px-4 relative"
       style={{
         backgroundImage: displayContent.backgroundImage ? `url(${displayContent.backgroundImage})` : undefined,
         backgroundSize: 'cover',
@@ -85,7 +85,7 @@ export default function About() {
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-5xl md:text-6xl font-display text-center text-primary glow-cyan-strong mb-12"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-display text-center text-primary glow-cyan-strong mb-8 sm:mb-10 md:mb-12"
         >
           {displayContent.title}
         </motion.h2>
@@ -95,11 +95,11 @@ export default function About() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="bg-card/80 backdrop-blur-sm border-2 border-primary/30 rounded-lg p-8 glow-box-cyan"
+          className="bg-card/80 backdrop-blur-sm border-2 border-primary/30 rounded-lg p-4 sm:p-6 md:p-8 glow-box-cyan"
         >
-          <div className="space-y-6 text-foreground/90 leading-relaxed">
+          <div className="space-y-4 sm:space-y-6 text-foreground/90 leading-relaxed text-sm sm:text-base">
             {displayContent.paragraphs.map((paragraph, index) => (
-              <p key={index} className={index === 0 ? 'text-lg' : ''}>
+              <p key={index} className={index === 0 ? 'text-base sm:text-lg' : ''}>
                 {index === 0 ? (
                   <>
                     A <span className="text-primary font-display glow-cyan">DVH Records</span>{paragraph.substring(14)}
